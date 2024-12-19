@@ -1,4 +1,6 @@
 package com.napos.stepper.core
 
-@StepContent
+import kotlinx.serialization.Serializable
+
+@Serializable
 abstract class StepData

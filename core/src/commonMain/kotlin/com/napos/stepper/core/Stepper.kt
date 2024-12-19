@@ -4,19 +4,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
 
 class Stepper private constructor(
     @PublishedApi
     internal val root: Step,
     @PublishedApi
-    internal val contentTransformer: (Json, Any) -> JsonElement,
+    internal val json: Json,
     val size: Int,
 ) {
     private var _current: MutableStateFlow<Step> = MutableStateFlow(value = root)
 
     val current: Flow<Step> = _current
         .buffer()
+
+    fun getCurrent(): Step = _current.value
 
     val currentIndex: Int
         get() {
@@ -46,18 +47,7 @@ class Stepper private constructor(
     }
 
     inline fun <reified T> aggregate(): T =
-        aggregate(root, contentTransformer)
-
-    @Deprecated("Temporary function", level = DeprecationLevel.WARNING)
-    fun printCurrentState() {
-        println("==================================")
-        println("|| Step\t\t: ${_current.value::class.simpleName}\t\t||")
-        println("|| Index\t: ${currentIndex + 1}/$size\t\t\t||")
-        println("|| Data\t\t: ${_current.value.data}\t||")
-        println("|| Next\t\t: ${_current.value.next?.let { it::class.simpleName }}\t\t||")
-        println("|| Previous\t: ${_current.value.previous?.let { it::class.simpleName }}\t\t\t||")
-        println("==================================")
-    }
+        aggregate(root, json)
 
     class Builder {
 
@@ -66,12 +56,8 @@ class Stepper private constructor(
 
         private var size: Int = 0
 
-        private lateinit var contentTransformer: (Json, Any) -> JsonElement
+        private lateinit var configuration: Json
 
-        @Suppress(
-            "Unused",
-            "MemberVisibilityCanBePrivate",
-        )
         fun addStep(step: Step) =
             apply {
                 if (!::root.isInitialized) {
@@ -85,18 +71,12 @@ class Stepper private constructor(
                 size++
             }
 
-        @Suppress(
-            "Unused",
-            "MemberVisibilityCanBePrivate"
-        )
         fun addSteps(steps: List<Step>) =
             apply { steps.forEach { addStep(it) } }
 
-        fun initContentTransformer(transformer: (Json, Any) -> JsonElement) =
-            apply {
-                contentTransformer = transformer
-            }
+        fun setSerializationConfiguration(json: Json) =
+            apply { configuration = json }
 
-        fun build(): Stepper = Stepper(root, contentTransformer, size)
+        fun build(): Stepper = Stepper(root, configuration, size)
     }
 }
