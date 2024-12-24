@@ -8,6 +8,8 @@ plugins {
 }
 
 kotlin {
+    explicitApi()
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -26,13 +28,29 @@ kotlin {
     sourceSets {
 
         commonMain.dependencies {
+            api(projects.core)
+
             implementation(compose.ui)
-            implementation(compose.foundation)
             implementation(compose.runtime)
+            implementation(compose.foundation)
             implementation(compose.material3)
+            implementation(compose.uiUtil)
 
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.kotlinx.coroutines.core)
+
+            implementation(libs.jetbrains.navigation.compose)
+            implementation(libs.jetbrains.lifecycle.compose)
+
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.composeVM)
+
+        }
+
+        jvmMain.dependencies {
+            implementation(compose.preview)
+            implementation(compose.uiTooling)
+            implementation(compose.desktop.currentOs)
         }
 
         commonTest.dependencies {

@@ -3,7 +3,10 @@ plugins {
 }
 rootProject.name = "stepper"
 
-include("core")
+include(
+    "core",
+    "ui",
+    "example",
+)
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-include("example")

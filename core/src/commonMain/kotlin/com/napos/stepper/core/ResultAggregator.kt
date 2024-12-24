@@ -34,13 +34,13 @@ import kotlinx.serialization.serializer
 @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
 @AggregationResult
 inline fun <@AggregationResult reified R> aggregate(
-    root: Step,
+    root: Milestone<*>,
     json: Json,
 ): R {
     // Enforce no class discriminator mode
     json.configuration.classDiscriminatorMode = ClassDiscriminatorMode.NONE
     val result = buildJsonObject {
-        var current: Step? = root
+        var current: Milestone<*>? = root
         while (current != null) {
             if (current.data == null) throw IllegalStateException("All steps should contain data before the aggregation attempt occurs")
             val serializer = current.data!!::class.serializer()

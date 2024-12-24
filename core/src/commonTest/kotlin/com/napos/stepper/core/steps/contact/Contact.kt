@@ -1,6 +1,6 @@
 package com.napos.stepper.core.steps.contact
 
-import com.napos.stepper.core.StepData
+import com.napos.stepper.core.MilestoneData
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,4 +9,4 @@ import kotlinx.serialization.Serializable
 data class Contact(
     @SerialName("email")
     val email: String,
-) : StepData()
+) : MilestoneData()

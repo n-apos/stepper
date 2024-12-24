@@ -26,13 +26,29 @@ kotlin {
     sourceSets {
 
         commonMain.dependencies {
+            api(projects.core)
+            api(projects.ui)
+
             implementation(compose.ui)
-            implementation(compose.foundation)
             implementation(compose.runtime)
+            implementation(compose.foundation)
             implementation(compose.material3)
+            implementation(compose.uiUtil)
 
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.kotlinx.coroutines.core)
+
+            implementation(libs.jetbrains.navigation.compose)
+            implementation(libs.jetbrains.lifecycle.compose)
+
+            implementation(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.composeVM)
+        }
+
+        jvmMain.dependencies {
+            implementation(compose.desktop.currentOs)
+            implementation(compose.uiTooling)
+            implementation(compose.preview)
         }
 
         commonTest.dependencies {
