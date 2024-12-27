@@ -9,16 +9,19 @@ import com.napos.stepper.example.steps.AggregatedResult
 import com.napos.stepper.ui.components.StepColors
 import com.napos.stepper.ui.components.StepProperties
 import com.napos.stepper.ui.components.Stepper
+import com.napos.stepper.ui.screen.MilestoneScreenProvider
 import org.koin.compose.koinInject
 
 
 @Composable
 fun StepperExample() {
     val roadmap: Roadmap = koinInject()
+    val provider: MilestoneScreenProvider = koinInject()
 
     Surface {
         Stepper(
             roadmap = roadmap,
+            provider = provider,
             properties = StepProperties(
                 size = 40.dp,
                 strokeRatio = 3f,

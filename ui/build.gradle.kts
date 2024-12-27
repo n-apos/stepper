@@ -41,10 +41,6 @@ kotlin {
             implementation(libs.jetbrains.navigation.compose)
             implementation(libs.jetbrains.lifecycle.compose)
 
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.composeVM)
-
         }
 
         jvmMain.dependencies {

@@ -9,11 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.napos.stepper.core.Roadmap
 import com.napos.stepper.ui.screen.MilestoneScreenProvider
-import org.koin.compose.koinInject
 
 @Composable
 public fun Stepper(
     roadmap: Roadmap,
+    provider: MilestoneScreenProvider,
     properties: StepProperties = StepProperties.Default,
     colors: StepColors = StepColors.Default,
     passedStep: @Composable () -> Unit = { PassedStep() },
@@ -27,7 +27,6 @@ public fun Stepper(
     onSubmit: () -> Unit = {},
 ) {
     val current by roadmap.current.collectAsState(null)
-    val provider: MilestoneScreenProvider = koinInject()
 
     CompositionLocalProvider(
         LocalStepperPropertiesProvider provides properties,
