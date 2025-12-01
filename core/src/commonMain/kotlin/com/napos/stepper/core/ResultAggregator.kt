@@ -38,7 +38,9 @@ inline fun <@AggregationResult reified R> aggregate(
     json: Json,
 ): R {
     // Enforce no class discriminator mode
-    json.configuration.classDiscriminatorMode = ClassDiscriminatorMode.NONE
+    require(json.configuration.classDiscriminatorMode == ClassDiscriminatorMode.NONE) {
+        "classDiscriminatorMode should be set to NONE"
+    }
     val result = buildJsonObject {
         var current: Milestone<*>? = root
         while (current != null) {

@@ -5,6 +5,8 @@ import com.napos.stepper.core.steps.civil.CivilInformation
 import com.napos.stepper.core.steps.civil.CivilMilestone
 import com.napos.stepper.core.steps.contact.Contact
 import com.napos.stepper.core.steps.contact.ContactMilestone
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
@@ -16,7 +18,9 @@ class RoadmapTest {
     private val civil: CivilMilestone = CivilMilestone()
     private val contact: ContactMilestone = ContactMilestone()
 
+    @OptIn(ExperimentalSerializationApi::class)
     private val json: Json = Json {
+        classDiscriminatorMode = ClassDiscriminatorMode.NONE
         serializersModule = SerializersModule {
             polymorphic(MilestoneData::class) {
                 subclass(CivilInformation::class)

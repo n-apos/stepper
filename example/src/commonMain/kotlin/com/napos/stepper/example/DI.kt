@@ -13,13 +13,17 @@ import com.napos.stepper.example.steps.third.ThirdData
 import com.napos.stepper.example.steps.third.ThirdMilestone
 import com.napos.stepper.example.steps.third.ThirdViewModel
 import com.napos.stepper.ui.screen.MilestoneScreenProvider
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
+import org.koin.core.context.startKoin
+import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
+@OptIn(ExperimentalSerializationApi::class)
 private val json: Json = Json {
     classDiscriminatorMode = ClassDiscriminatorMode.NONE
     serializersModule = SerializersModule {
@@ -47,4 +51,11 @@ val di = module {
     }
 
     single<MilestoneScreenProvider> { ExampleMilestoneProvider() }
+}
+
+fun initializeKoin(customDeclaration: KoinAppDeclaration = {}) {
+    startKoin {
+        customDeclaration()
+        modules(di)
+    }
 }
