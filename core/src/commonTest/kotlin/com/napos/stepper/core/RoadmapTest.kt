@@ -33,20 +33,19 @@ class RoadmapTest {
 
     @BeforeTest
     fun setup() {
-        roadmap = Roadmap.Builder()
-            .setSerializationConfiguration(json)
-            .addMilestone(civil)
-            .addMilestone(contact)
-            .build()
+        roadmap = Roadmap {
+            configuration = json
+            milestones += listOf(civil, contact)
+        }
     }
 
     @Test
     fun check_that_addSteps_works() {
         val steps = listOf(civil, contact)
-        val roadmap = Roadmap.Builder()
-            .setSerializationConfiguration(json)
-            .addMilestones(steps)
-            .build()
+        val roadmap = Roadmap {
+            configuration = json
+            milestones += steps
+        }
 
         assertTrue { this.roadmap.currentIndex == roadmap.currentIndex }
         assertTrue { this.roadmap.size == roadmap.size }

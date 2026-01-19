@@ -5,24 +5,24 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.serialization.json.Json
 
-class Roadmap private constructor(
+public class Roadmap internal constructor(
     @PublishedApi
     internal val root: Milestone<*>,
     @PublishedApi
     internal val json: Json,
-    val size: Int,
+    public val size: Int,
 ) {
 
-    val milestones: List<Milestone<*>>
+    public val milestones: List<Milestone<*>>
 
     private var _current: MutableStateFlow<Milestone<*>> = MutableStateFlow(value = root)
 
-    val current: Flow<Milestone<*>> = _current
+    public val current: Flow<Milestone<*>> = _current
         .buffer()
 
-    fun getCurrent(): Milestone<*> = _current.value
+    public fun getCurrent(): Milestone<*> = _current.value
 
-    val currentIndex: Int
+    public val currentIndex: Int
         get() {
             var index = 0
             var cursor: Milestone<*>? = root
@@ -43,30 +43,30 @@ class Roadmap private constructor(
         this.milestones = milestones
     }
 
-    fun fill(data: MilestoneData) {
+    public fun fill(data: MilestoneData) {
         _current.value.fill(data)
     }
 
-    fun next() {
+    public fun next() {
         _current.value.next?.let { next ->
             _current.value = next
         }
     }
 
-    fun previous() {
+    public fun previous() {
         _current.value.previous?.let { previous ->
             _current.value = previous
         }
     }
 
-    fun rollback() {
+    public fun rollback() {
         _current.value.data = null
         _current.value.previous?.let { previous ->
             _current.value = previous
         }
     }
 
-    fun reset() {
+    public fun reset() {
         var cursor: Milestone<*>? = root
         while (cursor != null) {
             cursor.data = null
@@ -74,38 +74,67 @@ class Roadmap private constructor(
         }
     }
 
-    inline fun <reified T> aggregate(): T =
+    public inline fun <reified T> aggregate(): T =
         aggregate(root, json)
 
+}
 
-    class Builder {
 
-        private lateinit var root: Milestone<*>
-        private lateinit var tip: Milestone<*>
+public class RoadmapBuilder @PublishedApi internal constructor() {
 
-        private var size: Int = 0
+    /**
+     * Construction specific fields
+     */
 
-        private lateinit var configuration: Json
+    private lateinit var root: Milestone<*>
+    private lateinit var tip: Milestone<*>
+    private var size: Int = 0
 
-        fun addMilestone(milestone: Milestone<*>) =
-            apply {
-                if (!::root.isInitialized) {
-                    root = milestone
-                    tip = milestone
-                } else {
-                    milestone.previous = tip
-                    tip.next = milestone
-                    tip = milestone
-                }
-                size++
-            }
 
-        fun addMilestones(milestones: List<Milestone<*>>) =
-            apply { milestones.forEach { addMilestone(it) } }
+    /**
+     * Builder specific fields, exposed publicly
+     */
+    public lateinit var configuration: Json
+    public val milestones: MutableList<Milestone<*>> = mutableListOf()
 
-        fun setSerializationConfiguration(json: Json) =
-            apply { configuration = json }
 
-        fun build(): Roadmap = Roadmap(root, configuration, size)
+    /**
+     * Builder APIs
+     */
+    internal fun add(milestone: Milestone<*>) {
+        if (!::root.isInitialized) {
+            root = milestone
+            tip = milestone
+        } else {
+            milestone.previous = tip
+            tip.next = milestone
+            tip = milestone
+        }
+        size++
     }
+
+    internal fun create() {
+        milestones.forEach { milestone ->
+            add(milestone)
+        }
+    }
+
+
+    /**
+     * Builder performer action
+     */
+    internal fun build(): Roadmap {
+        require(::configuration.isInitialized) {
+            error("${::configuration.name} field should be initialized")
+        }
+        create()
+        return Roadmap(root, configuration, size)
+    }
+
+}
+
+public fun Roadmap(block: RoadmapBuilder.() -> Unit): Roadmap {
+    val builder = RoadmapBuilder()
+    builder.block()
+    return builder.build()
 }

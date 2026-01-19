@@ -1,5 +1,6 @@
 package com.napos.stepper.ui.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,18 +10,24 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.napos.stepper.core.Roadmap
+import com.napos.stepper.ui.Res
 import com.napos.stepper.ui.screen.MilestoneScreenProvider
+import com.napos.stepper.ui.stepper_next_button
+import com.napos.stepper.ui.stepper_previous_button
+import com.napos.stepper.ui.stepper_submit_button
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 public fun Stepper(
@@ -30,13 +37,29 @@ public fun Stepper(
     modifier: Modifier = Modifier,
     properties: StepProperties = StepProperties.Default,
     colors: StepColors = StepColors.Default.defaultColors(),
-    stepComponent: @Composable (StepState) -> Unit = { Step(it) },
-    linkComponent: @Composable (StepState) -> Unit = { StepLink(it) },
-    nextButton: @Composable (onClick: () -> Unit) -> Unit = { StepButton(text = "Next", onClick = it) },
-    previousButton: @Composable (onClick: () -> Unit) -> Unit = { StepButton(text = "Previous", onClick = it) },
-    submitButton: @Composable (onClick: () -> Unit) -> Unit = { StepButton(text = "Submit", onClick = it) },
+    step: @Composable (StepState) -> Unit = { Step(it) },
+    stepLink: @Composable (StepState) -> Unit = { StepLink(it) },
+    nextButton: @Composable (onClick: () -> Unit) -> Unit = {
+        StepButton(
+            text = stringResource(Res.string.stepper_next_button),
+            onClick = it
+        )
+    },
+    previousButton: @Composable (onClick: () -> Unit) -> Unit = {
+        StepButton(
+            text = stringResource(Res.string.stepper_previous_button),
+            onClick = it
+        )
+    },
+    submitButton: @Composable (onClick: () -> Unit) -> Unit = {
+        StepButton(
+            text = stringResource(Res.string.stepper_submit_button),
+            onClick = it
+        )
+    },
 ) {
     val current by roadmap.current.collectAsState(null)
+    val screen = current?.let { provider.provide(it) }
 
     CompositionLocalProvider(
         LocalStepProperties provides properties,
@@ -55,33 +78,46 @@ public fun Stepper(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .heightIn(max = 40.dp)
-                        .padding(10.dp),
-                    horizontalArrangement = Arrangement.Center,
+                        .padding(10.dp)
+                        .weight(0.1f),
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     val currentIndex = roadmap.currentIndex
                     roadmap.milestones.forEachIndexed { index, _ ->
                         val state = when {
-                            index < currentIndex -> StepState.PASSED
-                            index == currentIndex -> StepState.CURRENT
-                            else -> StepState.COMING
+                            index < currentIndex -> StepState.Passed
+                            index == currentIndex -> StepState.Current
+                            else -> StepState.Coming
                         }
                         if (index != 0) {
-                            linkComponent(state)
+                            stepLink(state)
                         }
-                        stepComponent(state)
+                        step(state)
                     }
                 }
 
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
+                Column(
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(IntrinsicSize.Max)
-                        .padding(10.dp),
+                        .padding(10.dp)
+                        .weight(0.8f),
                 ) {
-                    current?.let { provider.provide(it).render() }
+                    screen?.let {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.Top,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(10.dp),
+                        ) {
+                            Text(it.title())
+                        }
+                    }
+                    screen?.render()
                 }
 
 
@@ -89,7 +125,8 @@ public fun Stepper(
                     horizontalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.End),
                     modifier = Modifier
                         .padding(10.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .weight(0.1f),
                 ) {
                     current?.previous?.let {
                         previousButton {

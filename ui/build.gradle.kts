@@ -1,4 +1,5 @@
 @file:OptIn(ExperimentalDistributionDsl::class)
+@file:Suppress("MISSING_DEPENDENCY_SUPERCLASS_IN_TYPE_ARGUMENT")
 
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
@@ -33,6 +34,11 @@ kotlin {
     }
 
     sourceSets {
+        sourceSets.commonMain {
+            kotlin.srcDir("src/commonMain/kotlin")
+            resources.srcDir("src/commonMain/composeResources")
+        }
+
 
         commonMain.dependencies {
             api(projects.core)
@@ -42,6 +48,8 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.uiUtil)
+
+            implementation(compose.components.resources)
 
             implementation(libs.kotlinx.serialization.json)
 
@@ -63,4 +71,10 @@ kotlin {
             implementation(compose.uiTest)
         }
     }
+}
+
+compose.resources {
+    generateResClass = always
+    publicResClass = true
+    packageOfResClass = "com.napos.stepper.ui"
 }

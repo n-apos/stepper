@@ -16,7 +16,7 @@ class StepLinkTest {
                 LocalStepColors provides StepColors.Default.defaultColors(),
                 LocalStepProperties provides StepProperties.Default,
             ) {
-                StepLink(state = StepState.PASSED)
+                StepLink(state = StepState.Passed)
             }
         }
         onNodeWithTag("step_link").assertExists()
@@ -29,7 +29,7 @@ class StepLinkTest {
                 LocalStepColors provides StepColors.Default.defaultColors(),
                 LocalStepProperties provides StepProperties.Default,
             ) {
-                StepLink(state = StepState.COMING)
+                StepLink(state = StepState.Coming)
             }
         }
         onNodeWithTag("step_link").assertExists()

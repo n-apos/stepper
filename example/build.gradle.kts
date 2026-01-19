@@ -1,4 +1,5 @@
 @file:OptIn(ExperimentalDistributionDsl::class)
+@file:Suppress("MISSING_DEPENDENCY_SUPERCLASS_IN_TYPE_ARGUMENT")
 
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
@@ -31,6 +32,12 @@ kotlin {
 
     sourceSets {
 
+        sourceSets.commonMain {
+            kotlin.srcDir("src/commonMain/kotlin")
+            resources.srcDir("src/commonMain/composeResources")
+        }
+
+
         commonMain.dependencies {
             api(projects.core)
             api(projects.ui)
@@ -45,6 +52,8 @@ kotlin {
 
             implementation(libs.jetbrains.navigation.compose)
             implementation(libs.jetbrains.lifecycle.compose)
+
+            implementation(compose.components.resources)
 
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
@@ -61,4 +70,10 @@ kotlin {
             implementation(libs.kotlin.test.common)
         }
     }
+}
+
+compose.resources {
+    generateResClass = always
+    publicResClass = true
+    packageOfResClass = "com.napos.stepper.example"
 }

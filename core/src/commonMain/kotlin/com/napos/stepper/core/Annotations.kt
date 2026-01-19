@@ -39,4 +39,4 @@ import kotlinx.serialization.MetaSerializable
     AnnotationTarget.TYPE_PARAMETER,
 )
 @MetaSerializable
-annotation class AggregationResult
+public annotation class AggregationResult

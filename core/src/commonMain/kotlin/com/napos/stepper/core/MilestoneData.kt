@@ -3,4 +3,4 @@ package com.napos.stepper.core
 import kotlinx.serialization.Serializable
 
 @Serializable
-abstract class MilestoneData
+public abstract class MilestoneData

@@ -29,6 +29,8 @@ kotlin {
         binaries.executable()
     }
 
+    explicitApi()
+
     sourceSets {
 
         commonMain.dependencies {

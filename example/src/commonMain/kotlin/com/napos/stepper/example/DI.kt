@@ -42,12 +42,10 @@ val di = module {
     single { ThirdViewModel() }
 
     single {
-        Roadmap.Builder()
-            .addMilestone(FirstMilestone())
-            .addMilestone(SecondMilestone())
-            .addMilestone(ThirdMilestone())
-            .setSerializationConfiguration(json)
-            .build()
+        Roadmap {
+            configuration = json
+            milestones += listOf(FirstMilestone(), SecondMilestone(), ThirdMilestone())
+        }
     }
 
     single<MilestoneScreenProvider> { ExampleMilestoneProvider() }

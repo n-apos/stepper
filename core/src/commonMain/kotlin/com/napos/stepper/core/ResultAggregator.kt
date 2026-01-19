@@ -33,7 +33,7 @@ import kotlinx.serialization.serializer
  */
 @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
 @AggregationResult
-inline fun <@AggregationResult reified R> aggregate(
+public inline fun <@AggregationResult reified R> aggregate(
     root: Milestone<*>,
     json: Json,
 ): R {

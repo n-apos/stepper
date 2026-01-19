@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <string name="stepper_first_screen_title">First</string>
+    <string name="stepper_second_screen_title">Second</string>
+    <string name="stepper_third_screen_title">Third</string>
+</resources>

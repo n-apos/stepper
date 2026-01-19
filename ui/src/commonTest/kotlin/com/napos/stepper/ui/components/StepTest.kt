@@ -16,7 +16,7 @@ class StepTest {
                 LocalStepColors provides StepColors.Default.defaultColors(),
                 LocalStepProperties provides StepProperties.Default,
             ) {
-                Step(state = StepState.PASSED)
+                Step(state = StepState.Passed)
             }
         }
         onNodeWithTag("step").assertExists()
@@ -29,7 +29,7 @@ class StepTest {
                 LocalStepColors provides StepColors.Default.defaultColors(),
                 LocalStepProperties provides StepProperties.Default,
             ) {
-                Step(state = StepState.CURRENT)
+                Step(state = StepState.Current)
             }
         }
         onNodeWithTag("step").assertExists()
@@ -42,7 +42,7 @@ class StepTest {
                 LocalStepColors provides StepColors.Default.defaultColors(),
                 LocalStepProperties provides StepProperties.Default,
             ) {
-                Step(state = StepState.COMING)
+                Step(state = StepState.Coming)
             }
         }
         onNodeWithTag("step").assertExists()

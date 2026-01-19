@@ -24,6 +24,11 @@ class MilestoneScreenProviderTest {
         override val milestone: TestMilestone,
         override val viewModel: TestViewModel,
     ) : MilestoneScreen<TestMilestone, TestViewModel>() {
+
+        @Composable
+        override fun title(): String = "Test"
+
+
         @Composable
         override fun render() {
             Text("Test Screen")
