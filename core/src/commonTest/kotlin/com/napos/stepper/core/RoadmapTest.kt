@@ -102,7 +102,7 @@ class RoadmapTest {
     @Test
     fun check_that_filling_step_data_fails_for_inappropriate_step() {
         val contact = Contact(email = "some@email.com")
-        assertFailsWith(IllegalArgumentException::class) {
+        assertFailsWith(ClassCastException::class) {
             roadmap.fill(contact)
         }
     }

@@ -7,7 +7,7 @@ import com.napos.stepper.ui.screen.MilestoneScreen
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-public class FirstScreen(
+class FirstScreen(
     override val milestone: FirstMilestone,
 ) : MilestoneScreen<FirstMilestone, FirstViewModel>(), KoinComponent {
 

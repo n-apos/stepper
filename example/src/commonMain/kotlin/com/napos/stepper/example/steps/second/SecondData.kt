@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 @SerialName("second")
-public data class SecondData(
+data class SecondData(
+    @SerialName("value")
     val value: String,
 ): MilestoneData()

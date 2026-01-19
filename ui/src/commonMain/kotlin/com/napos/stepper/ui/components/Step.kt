@@ -5,68 +5,60 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.testTag
 
-@Composable
-internal fun PassedStep() {
-    val properties = LocalStepperPropertiesProvider.current
-    val colors = LocalStepperColorsProvider.current
-
-    Canvas(
-        modifier = Modifier
-            .size(properties.size),
-        onDraw = {
-            drawCircle(
-                color = colors.passed,
-                style = Stroke(
-                    width = properties.strokeWidth,
-                ),
-            )
-            drawCircle(
-                color = colors.passed,
-                radius = size.width / 2,
-            )
-        }
-    )
+public enum class StepState {
+    PASSED,
+    CURRENT,
+    COMING
 }
 
 @Composable
-internal fun CurrentStep() {
-    val properties = LocalStepperPropertiesProvider.current
-    val colors = LocalStepperColorsProvider.current
+public fun Step(state: StepState) {
+    val properties = LocalStepProperties.current
+    val colors = LocalStepColors.current
 
     Canvas(
         modifier = Modifier
-            .size(properties.size),
+            .size(properties.size)
+            .testTag("step"),
         onDraw = {
-            drawCircle(
-                color = colors.current,
-                style = Stroke(
-                    width = properties.strokeWidth,
-                ),
-            )
-            drawCircle(
-                color = colors.current,
-                radius = size.width / properties.strokeRatio,
-            )
-        }
-    )
-}
+            when (state) {
+                StepState.PASSED -> {
+                    drawCircle(
+                        color = colors.passed,
+                        style = Stroke(
+                            width = properties.strokeWidth,
+                        ),
+                    )
+                    drawCircle(
+                        color = colors.passed,
+                        radius = size.width / 2,
+                    )
+                }
 
-@Composable
-internal fun ComingStep() {
-    val properties = LocalStepperPropertiesProvider.current
-    val colors = LocalStepperColorsProvider.current
+                StepState.CURRENT -> {
+                    drawCircle(
+                        color = colors.current,
+                        style = Stroke(
+                            width = properties.strokeWidth,
+                        ),
+                    )
+                    drawCircle(
+                        color = colors.current,
+                        radius = size.width / properties.strokeRatio,
+                    )
+                }
 
-    Canvas(
-        modifier = Modifier
-            .size(properties.size),
-        onDraw = {
-            drawCircle(
-                color = colors.coming,
-                style = Stroke(
-                    width = properties.strokeWidth,
-                ),
-            )
+                StepState.COMING -> {
+                    drawCircle(
+                        color = colors.coming,
+                        style = Stroke(
+                            width = properties.strokeWidth,
+                        ),
+                    )
+                }
+            }
         }
     )
 }

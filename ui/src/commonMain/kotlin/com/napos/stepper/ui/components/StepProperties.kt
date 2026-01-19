@@ -1,5 +1,7 @@
 package com.napos.stepper.ui.components
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
@@ -26,21 +28,24 @@ public open class StepColors(
     public val current: Color,
     public val coming: Color,
 ) {
-    public data object Default : StepColors(
-        passed = Color.Red,
-        current = Color.Cyan,
-        coming = Color.Red,
-    )
+    public object Default {
+        @Composable
+        public fun defaultColors(): StepColors = StepColors(
+            passed = MaterialTheme.colorScheme.primary,
+            current = MaterialTheme.colorScheme.secondary,
+            coming = MaterialTheme.colorScheme.tertiary,
+        )
+    }
 }
 
 
-public val LocalStepperPropertiesProvider: ProvidableCompositionLocal<StepProperties> =
+public val LocalStepProperties: ProvidableCompositionLocal<StepProperties> =
     compositionLocalOf {
-        error("")
+        StepProperties.Default
     }
 
 
-public val LocalStepperColorsProvider: ProvidableCompositionLocal<StepColors> =
+public val LocalStepColors: ProvidableCompositionLocal<StepColors> =
     compositionLocalOf {
-        error("")
+        error("No StepColors provided")
     }

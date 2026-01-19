@@ -10,13 +10,13 @@ import com.napos.stepper.example.steps.third.ThirdScreen
 import com.napos.stepper.ui.screen.MilestoneScreen
 import com.napos.stepper.ui.screen.MilestoneScreenProvider
 
-class ExampleMilestoneProvider: MilestoneScreenProvider() {
+class ExampleMilestoneProvider: MilestoneScreenProvider({ object : MilestoneScreen() {} }) {
 
     override fun provide(milestone: Milestone<*>): MilestoneScreen<*, *> =
         when(milestone) {
             is FirstMilestone -> FirstScreen(milestone)
             is SecondMilestone -> SecondScreen(milestone)
             is ThirdMilestone -> ThirdScreen(milestone)
-            else -> throw IllegalArgumentException("")
+            else -> error("Milestone not supported")
         }
 }

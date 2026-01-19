@@ -1,55 +1,33 @@
 package com.napos.stepper.ui.components
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 
 @Composable
-public fun PassedStepLink() {
-    val properties = LocalStepperPropertiesProvider.current
-    val colors = LocalStepperColorsProvider.current
-
+public fun StepLink(state: StepState) {
+    val colors = LocalStepColors.current
+    val color = when (state) {
+        StepState.PASSED, StepState.CURRENT -> colors.passed
+        StepState.COMING -> colors.coming
+    }
     Canvas(
         modifier = Modifier
-            .size(properties.size),
+            .width(20.dp)
+            .height(20.dp)
+            .testTag("step_link"),
         onDraw = {
-
-            val linkWidth = size.width * 0.8f
-            val startX = size.width - linkWidth
-            val endX = size.width - startX
-
             drawLine(
-                start = Offset(x = startX, y = size.height / 2),
-                end = Offset(x = endX, y = size.height / 2),
-                strokeWidth = properties.strokeWidth,
-                color = colors.passed,
+                color = color,
+                start = Offset(x = 0f, y = size.height / 2),
+                end = Offset(x = size.width, y = size.height / 2),
+                strokeWidth = 2f,
             )
-        },
-    )
-}
-
-@Composable
-public fun ComingStepLink() {
-    val properties = LocalStepperPropertiesProvider.current
-    val colors = LocalStepperColorsProvider.current
-
-    Canvas(
-        modifier = Modifier
-            .size(properties.size),
-        onDraw = {
-
-            val linkWidth = size.width * 0.8f
-            val startX = size.width - linkWidth
-            val endX = size.width - startX
-
-            drawLine(
-                start = Offset(x = startX, y = size.height / 2),
-                end = Offset(x = endX, y = size.height / 2),
-                strokeWidth = properties.strokeWidth,
-                color = colors.coming,
-            )
-        },
+        }
     )
 }

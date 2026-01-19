@@ -1,5 +1,6 @@
 @file:OptIn(ExperimentalDistributionDsl::class)
 
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 
@@ -57,6 +58,9 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test.common)
+
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
         }
     }
 }
