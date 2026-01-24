@@ -1,6 +1,7 @@
 @file:OptIn(ExperimentalDistributionDsl::class)
 @file:Suppress("MISSING_DEPENDENCY_SUPERCLASS_IN_TYPE_ARGUMENT")
 
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
 
@@ -12,6 +13,8 @@ plugins {
 }
 
 kotlin {
+    explicitApi()
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -23,15 +26,14 @@ kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         browser {
-            commonWebpackConfig {
-                outputFileName = "n-stepper-example.js"
+            distribution {
+                outputDirectory.set(layout.buildDirectory.dir("wasm"))
             }
         }
         binaries.executable()
     }
 
     sourceSets {
-
         sourceSets.commonMain {
             kotlin.srcDir("src/commonMain/kotlin")
             resources.srcDir("src/commonMain/composeResources")
@@ -40,7 +42,6 @@ kotlin {
 
         commonMain.dependencies {
             api(projects.core)
-            api(projects.compose)
 
             implementation(compose.ui)
             implementation(compose.runtime)
@@ -48,26 +49,26 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.uiUtil)
 
+            implementation(compose.components.resources)
+
             implementation(libs.kotlinx.serialization.json)
 
             implementation(libs.jetbrains.navigation.compose)
             implementation(libs.jetbrains.lifecycle.compose)
 
-            implementation(compose.components.resources)
-
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.composeVM)
         }
 
         jvmMain.dependencies {
-            implementation(compose.desktop.currentOs)
-            implementation(compose.uiTooling)
             implementation(compose.preview)
+            implementation(compose.uiTooling)
+            implementation(compose.desktop.currentOs)
         }
 
         commonTest.dependencies {
             implementation(libs.kotlin.test.common)
+
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
         }
     }
 }
@@ -75,5 +76,5 @@ kotlin {
 compose.resources {
     generateResClass = always
     publicResClass = true
-    packageOfResClass = "com.napos.stepper.example"
+    packageOfResClass = "com.napos.stepper.compose"
 }

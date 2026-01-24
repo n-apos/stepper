@@ -1,5 +1,6 @@
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
+import com.napos.stepper.example.StepperApp
 import com.napos.stepper.example.StepperExample
 import com.napos.stepper.example.initializeKoin
 
@@ -12,7 +13,7 @@ fun main() {
     ComposeViewport(
         viewportContainerId = "root",
     ) {
-        StepperExample()
+        StepperApp()
     }
 
 }

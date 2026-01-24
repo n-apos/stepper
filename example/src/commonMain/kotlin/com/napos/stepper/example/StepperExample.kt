@@ -1,23 +1,21 @@
 package com.napos.stepper.example
 
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.napos.stepper.core.AggregationResult
 import com.napos.stepper.core.Roadmap
 import com.napos.stepper.example.steps.AggregatedResult
 import com.napos.stepper.example.steps.first.FirstData
 import com.napos.stepper.example.steps.second.SecondData
 import com.napos.stepper.example.steps.third.ThirdData
-import com.napos.stepper.ui.components.Stepper
-import com.napos.stepper.ui.screen.MilestoneScreenProvider
-import org.koin.compose.koinInject
+import com.napos.stepper.compose.components.Stepper
+import com.napos.stepper.compose.screen.MilestoneScreenProvider
 
 
 @Composable
-fun StepperExample() {
-    val roadmap: Roadmap = koinInject()
-    val provider: MilestoneScreenProvider = koinInject()
+fun StepperExample(
+    roadmap: Roadmap,
+    provider: MilestoneScreenProvider,
+) {
     val result = AggregatedResult(
         first = FirstData("first"),
         second = SecondData("second"),

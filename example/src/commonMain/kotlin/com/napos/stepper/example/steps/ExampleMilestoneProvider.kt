@@ -7,8 +7,8 @@ import com.napos.stepper.example.steps.second.SecondMilestone
 import com.napos.stepper.example.steps.second.SecondScreen
 import com.napos.stepper.example.steps.third.ThirdMilestone
 import com.napos.stepper.example.steps.third.ThirdScreen
-import com.napos.stepper.ui.screen.MilestoneScreen
-import com.napos.stepper.ui.screen.MilestoneScreenProvider
+import com.napos.stepper.compose.screen.MilestoneScreen
+import com.napos.stepper.compose.screen.MilestoneScreenProvider
 
 class ExampleMilestoneProvider: MilestoneScreenProvider() {
 

@@ -9,7 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.napos.stepper.example.Res
 import com.napos.stepper.example.stepper_first_screen_title
-import com.napos.stepper.ui.screen.MilestoneScreen
+import com.napos.stepper.compose.screen.MilestoneScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

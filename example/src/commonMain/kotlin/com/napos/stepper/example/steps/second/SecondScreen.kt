@@ -5,7 +5,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import com.napos.stepper.example.Res
 import com.napos.stepper.example.stepper_second_screen_title
-import com.napos.stepper.ui.screen.MilestoneScreen
+import com.napos.stepper.compose.screen.MilestoneScreen
 import org.jetbrains.compose.resources.stringResource
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject

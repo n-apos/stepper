@@ -12,7 +12,7 @@ import com.napos.stepper.example.steps.second.SecondViewModel
 import com.napos.stepper.example.steps.third.ThirdData
 import com.napos.stepper.example.steps.third.ThirdMilestone
 import com.napos.stepper.example.steps.third.ThirdViewModel
-import com.napos.stepper.ui.screen.MilestoneScreenProvider
+import com.napos.stepper.compose.screen.MilestoneScreenProvider
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.ClassDiscriminatorMode
 import kotlinx.serialization.json.Json
