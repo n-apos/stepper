@@ -45,7 +45,8 @@ sonar {
         property("sonar.projectKey", "n-apos_stepper")
         property("sonar.projectName", "stepper")
         property("sonar.projectVersion", version)
-        property("sonar.host.url", "https://sonarcloud.io")
+        val url = System.getenv("SONAR_HOST_URL") ?: properties["SONAR_HOST_URL"] as String
+        property("sonar.host.url", url)
 
         property(
             "sonar.coverage.jacoco.xmlReportPaths",

@@ -101,8 +101,9 @@ class RoadmapTest {
     @Test
     fun check_that_filling_step_data_fails_for_inappropriate_step() {
         val contact = Contact(email = "some@email.com")
-        assertFailsWith(ClassCastException::class) {
+        assertInvalidCast<CivilInformation> {
             roadmap.fill(contact)
+            roadmap.getCurrent().data as CivilInformation
         }
     }
 
