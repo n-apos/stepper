@@ -5,7 +5,7 @@ import com.napos.stepper.core.Milestone
 
 public abstract class MilestoneScreen<M : Milestone<*>, VM : MilestoneViewModel> {
 
-    protected abstract val milestone: Milestone<*>
+    protected abstract val milestone: M
     protected abstract val viewModel: VM
 
     @Composable

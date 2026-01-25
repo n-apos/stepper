@@ -11,7 +11,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class ThirdScreen(
-    override val milestone: ThirdMilestone
+    override val milestone: ThirdMilestone,
 ) : MilestoneScreen<ThirdMilestone, ThirdViewModel>(), KoinComponent {
     override val viewModel: ThirdViewModel by inject()
 
