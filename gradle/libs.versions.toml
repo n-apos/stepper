@@ -11,6 +11,9 @@ compose = "1.9.3"
 navigationCompose = "2.9.1"
 lifecycleCompose = "2.8.0"
 
+sonar = "7.2.2.6593"
+kover = "0.9.4"
+
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -29,8 +32,10 @@ koin-composeVM = { module = "io.insert-koin:koin-compose-viewmodel", version.ref
 
 
 [plugins]
-
 jetbrains-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 jetbrains-compiler-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+sonar = { id = "org.sonarqube", version.ref = "sonar" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }

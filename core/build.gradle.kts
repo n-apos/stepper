@@ -2,12 +2,15 @@
 
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
+import org.sonarqube.gradle.SonarTask
 
 plugins {
     alias(libs.plugins.jetbrains.kotlin.multiplatform)
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.jetbrains.compiler.compose)
+    alias(libs.plugins.kover)
+    alias(libs.plugins.sonar)
 }
 
 kotlin {
@@ -45,6 +48,25 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test.common)
+        }
+    }
+}
+
+kover {
+    reports {
+        filters {
+            includes {
+                packages("com.napos.stepper.core")
+            }
+        }
+        total {
+            xml {
+                require(true)
+                xmlFile = layout.buildDirectory.file("reports/kover/coverage.xml")
+            }
+            html {
+                require(true)
+            }
         }
     }
 }

@@ -2,8 +2,15 @@ package com.napos.stepper.compose.screen
 
 import com.napos.stepper.core.Milestone
 
-public abstract class MilestoneScreenProvider {
+public fun interface MilestoneScreenProvider {
 
 
-    public abstract fun provide(milestone: Milestone<*>): MilestoneScreen<*, *>
+    public fun provide(milestone: Milestone<*>): MilestoneScreen<*, *>
+
+    public companion object {
+
+        public inline operator fun invoke(crossinline block: (milestone: Milestone<*>) -> MilestoneScreen<*, *>): MilestoneScreenProvider =
+            MilestoneScreenProvider { block(it) }
+
+    }
 }

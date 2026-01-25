@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.jetbrains.compiler.compose)
+    alias(libs.plugins.sonar)
 }
 
 kotlin {
@@ -76,4 +77,8 @@ compose.resources {
     generateResClass = always
     publicResClass = true
     packageOfResClass = "com.napos.stepper.example"
+}
+
+sonar {
+    isSkipProject = true
 }

@@ -1,5 +1,5 @@
+
 @file:OptIn(ExperimentalDistributionDsl::class)
-@file:Suppress("MISSING_DEPENDENCY_SUPERCLASS_IN_TYPE_ARGUMENT")
 
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
@@ -10,6 +10,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.jetbrains.compiler.compose)
+    alias(libs.plugins.kover)
+    alias(libs.plugins.sonar)
 }
 
 kotlin {
@@ -77,4 +79,38 @@ compose.resources {
     generateResClass = always
     publicResClass = true
     packageOfResClass = "com.napos.stepper.compose"
+}
+
+kover {
+    reports {
+        filters {
+            includes {
+                packages("com.napos.stepper.compose")
+            }
+
+            excludes {
+                classes("*StepperKt")
+            }
+        }
+        total {
+            xml {
+                require(true)
+                xmlFile = layout.buildDirectory.file("reports/kover/coverage.xml")
+            }
+            html {
+                require(true)
+            }
+        }
+    }
+}
+
+sonar {
+    properties {
+
+//        property(
+//            "sonar.coverage.jacoco.xmlReportPaths",
+//            "${layout.buildDirectory.get()}/reports/kover/coverage.xml"
+//        )
+
+    }
 }
