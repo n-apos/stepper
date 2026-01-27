@@ -4,6 +4,7 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalDistributionDsl
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 plugins {
     alias(libs.plugins.jetbrains.kotlin.multiplatform)
@@ -12,7 +13,13 @@ plugins {
     alias(libs.plugins.jetbrains.compiler.compose)
     alias(libs.plugins.kover)
     alias(libs.plugins.sonar)
+    alias(libs.plugins.dokka)
 }
+
+group = rootProject.group
+version = rootProject.version
+
+apply("../gradle/publish.gradle.kts")
 
 kotlin {
     explicitApi()

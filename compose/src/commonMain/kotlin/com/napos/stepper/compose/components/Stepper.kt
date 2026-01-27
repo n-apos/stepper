@@ -27,6 +27,24 @@ import com.napos.stepper.compose.stepper_previous_button
 import com.napos.stepper.compose.stepper_submit_button
 import org.jetbrains.compose.resources.stringResource
 
+/**
+ * A composable that provides a complete stepper UI, including step indicators, content, and navigation buttons.
+ *
+ * This is the main entry point for using the stepper library. It orchestrates the display of milestones
+ * from a [Roadmap] and handles user interactions.
+ *
+ * @param roadmap The [Roadmap] instance that defines the structure and state of the stepper.
+ * @param provider The [MilestoneScreenProvider] responsible for creating the UI for each milestone.
+ * @param onSubmit A lambda to be executed when the final step is submitted.
+ * @param modifier The [Modifier] to be applied to the stepper container.
+ * @param properties The [StepProperties] to customize the appearance of the step indicators.
+ * @param colors The [StepColors] to customize the colors of the step indicators and links.
+ * @param step A composable lambda for rendering a single step indicator. Defaults to [Step].
+ * @param stepLink A composable lambda for rendering the link between steps. Defaults to [StepLink].
+ * @param nextButton A composable lambda for the 'Next' button.
+ * @param previousButton A composable lambda for the 'Previous' button.
+ * @param submitButton A composable lambda for the 'Submit' button.
+ */
 @Composable
 public fun Stepper(
     roadmap: Roadmap,

@@ -13,18 +13,51 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 
+/**
+ * Represents the visual state of a step in the stepper.
+ */
 public enum class StepState {
+    /**
+     * The step has been successfully completed.
+     */
     Passed,
+
+    /**
+     * The step is the current active step.
+     */
     Current,
+
+    /**
+     * The step has not yet been reached.
+     */
     Coming
 }
 
+/**
+ * Defines the position of the title relative to the step indicator.
+ */
 public enum class TitlePosition {
+    /**
+     * The title is displayed above the step indicator.
+     */
     Top,
+
+    /**
+     * The title is displayed below the step indicator.
+     */
     Bottom,
     ;
 }
 
+/**
+ * A composable that renders a single step indicator in the stepper.
+ *
+ * The appearance of the step is determined by its [state] and customized by the [LocalStepProperties]
+ * and [LocalStepColors] provided by the [Stepper] component.
+ *
+ * @param state The current [StepState] of the step (e.g., Passed, Current, Coming).
+ * @param contentDescription An optional description for accessibility services.
+ */
 @Composable
 public fun Step(
     state: StepState,

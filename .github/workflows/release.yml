@@ -12,7 +12,13 @@ on:
         required: true
         type: string
     secrets:
-      token:
+      GPG_SIGNING_KEY:
+        required: true
+      GPG_PASSPHRASE:
+        required: true
+      SONATYPE_USERNAME:
+        required: true
+      SONATYPE_PASSWORD:
         required: true
 
 jobs:
@@ -33,19 +39,32 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Restore cached artifacts
-        id: cache-restore
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/build/libs
-            **/build/bin
-            **/build/wasm
-          key: artifacts-${{ inputs.sha }}
+      - name: Import GPG Key
+        run: |
+          echo "${{ secrets.GRADLE_SECRET_PROPERTIES }}" >> gradle.properties
+          printf "%s\n" "${{ secrets.GPG_SIGNING_KEY }}" | gpg --batch --import
+        env:
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
 
-      - name: Publish to GitHub Package Registry
-        if: steps.cache-restore.outputs.cache-hit == 'true'
-        run: ./gradlew publish
+      - name: Test GPG Key signing
+        run: |
+          echo "Test" | gpg --batch --yes --pinentry-mode loopback --passphrase "$GPG_PASSPHRASE" --sign
+        env:
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Publish "core" to Maven Central
+        run: ./gradlew :core:publish
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Publish "compose" to Maven Central
+        run: ./gradlew :compose:publish
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
 
   release:
     runs-on: self-hosted
@@ -64,22 +83,12 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Restore cached artifacts
-        id: cache-restore
-        uses: actions/cache@v4
-        with:
-          path: |
-            **/build/libs
-            **/build/bin
-            **/build/wasm
-          key: artifacts-${{ inputs.sha }}
+      - name: Build artifacts
+        run: ./gradlew assemble
 
       - name: Create Release and Upload Artifacts
-        if: steps.cache-restore.outputs.cache-hit == 'true'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ inputs.version }}
-          files: |
-            **/build/libs/*
-            **/build/bin/**/*
-            **/build/wasm/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

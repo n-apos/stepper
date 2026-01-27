@@ -5,9 +5,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.serialization.json.Json
 
+/**
+ * Represents the complete journey or process, composed of a series of [Milestone]s.
+ *
+ * A Roadmap manages the state of the stepper, including the current step, navigation between steps,
+ * and data aggregation.
+ *
+ * @property size The total number of milestones in the roadmap.
+ * @property milestones An ordered list of all milestones in the roadmap.
+ * @property current A [Flow] that emits the current [Milestone] whenever it changes.
+ * @property currentIndex The index of the current milestone in the [milestones] list.
+ */
 public class Roadmap internal constructor(
     @PublishedApi
-    internal val root: Milestone<*>,
+    internal val root: Milestone<*>, 
     @PublishedApi
     internal val json: Json,
     public val size: Int,
@@ -20,6 +31,9 @@ public class Roadmap internal constructor(
     public val current: Flow<Milestone<*>> = _current
         .buffer()
 
+    /**
+     * Synchronously returns the current [Milestone].
+     */
     public fun getCurrent(): Milestone<*> = _current.value
 
     public val currentIndex: Int
@@ -43,22 +57,35 @@ public class Roadmap internal constructor(
         this.milestones = milestones
     }
 
+    /**
+     * Fills the current milestone with the provided [data].
+     * @param data The [MilestoneData] to be set for the current step.
+     */
     public fun fill(data: MilestoneData) {
         _current.value.fill(data)
     }
 
+    /**
+     * Navigates to the next milestone in the roadmap, if one exists.
+     */
     public fun next() {
         _current.value.next?.let { next ->
             _current.value = next
         }
     }
 
+    /**
+     * Navigates to the previous milestone in the roadmap, if one exists.
+     */
     public fun previous() {
         _current.value.previous?.let { previous ->
             _current.value = previous
         }
     }
 
+    /**
+     * Clears the data of the current milestone and navigates to the previous one.
+     */
     public fun rollback() {
         _current.value.data = null
         _current.value.previous?.let { previous ->
@@ -66,6 +93,9 @@ public class Roadmap internal constructor(
         }
     }
 
+    /**
+     * Resets the entire roadmap by clearing the data from all milestones.
+     */
     public fun reset() {
         var cursor: Milestone<*>? = root
         while (cursor != null) {
@@ -74,12 +104,22 @@ public class Roadmap internal constructor(
         }
     }
 
+    /**
+     * Aggregates the data from all milestones into a single object of type [T].
+     * This requires a [Json] configuration that can handle the serialization of all [MilestoneData] types.
+     * @return An object of type [T] containing the aggregated data.
+     */
     public inline fun <reified T> aggregate(): T =
         aggregate(root, json)
 
 }
 
-
+/**
+ * A DSL builder for creating a [Roadmap] instance.
+ *
+ * @property configuration The [Json] configuration required for data serialization and aggregation.
+ * @property milestones A mutable list of [Milestone]s to be included in the roadmap.
+ */
 public class RoadmapBuilder @PublishedApi internal constructor() {
 
     /**
@@ -133,6 +173,12 @@ public class RoadmapBuilder @PublishedApi internal constructor() {
 
 }
 
+/**
+ * A DSL entry point for creating a [Roadmap].
+ *
+ * @param block A lambda with a [RoadmapBuilder] receiver to configure the roadmap.
+ * @return A new [Roadmap] instance.
+ */
 public fun Roadmap(block: RoadmapBuilder.() -> Unit): Roadmap {
     val builder = RoadmapBuilder()
     builder.block()

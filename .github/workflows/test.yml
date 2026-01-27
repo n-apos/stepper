@@ -7,11 +7,6 @@ on:
         description: 'The git SHA to check out'
         required: true
         type: string
-    secrets:
-      SONAR_TOKEN:
-        required: true
-      SONAR_HOST_URL:
-        required: true
 
 jobs:
   test:
