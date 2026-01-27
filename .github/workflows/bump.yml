@@ -1,0 +1,51 @@
+name: Bump Version
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: 'The git ref to checkout and extract version from'
+        required: true
+        type: string
+    secrets:
+      GITHUB_TOKEN:
+        required: true
+    outputs:
+      version:
+        description: "The new version number"
+        value: ${{ jobs.bump.outputs.version }}
+      sha:
+        description: "The new commit SHA after bumping the version"
+        value: ${{ jobs.bump.outputs.sha }}
+
+jobs:
+  bump:
+    runs-on: self-hosted
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
+      sha: ${{ steps.commit_and_push.outputs.sha }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0 # Required to push
+
+      - name: Extract version from branch name
+        id: extract_version
+        run: echo "version=${{ inputs.ref#refs/heads/release/ }}" >> $GITHUB_OUTPUT
+
+      - name: Update version.properties
+        run: ./gradlew setVersion -Pversion=${{ steps.extract_version.outputs.version }}
+
+      - name: Commit, Tag and Push
+        id: commit_and_push
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add version.properties
+          git commit -m "Bump version to ${{ steps.extract_version.outputs.version }}"
+          echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+          git tag "v${{ steps.extract_version.outputs.version }}"
+          git push --follow-tags

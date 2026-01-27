@@ -1,8 +1,12 @@
 name: Build and Cache Artifacts
 
 on:
-  push:
-    branches: [ main, develop ]
+  workflow_call:
+    inputs:
+      sha:
+        description: 'The git SHA to check out'
+        required: true
+        type: string
 
 jobs:
   build:
@@ -11,6 +15,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.sha }}
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -31,4 +37,4 @@ jobs:
             **/build/libs
             **/build/bin
             **/build/wasm
-          key: artifacts-${{ github.sha }}
+          key: artifacts-${{ inputs.sha }}

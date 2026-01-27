@@ -1,4 +1,4 @@
-import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.konan.properties.Properties
 import org.sonarqube.gradle.SonarTask
 
 plugins {
@@ -11,7 +11,8 @@ plugins {
 
 
 group = "com.napos"
-version = "1.0-SNAPSHOT"
+version = getVersion()
+
 
 allprojects {
     repositories {
@@ -62,4 +63,33 @@ tasks.withType<SonarTask> {
 dependencies {
     kover(projects.core)
     kover(projects.compose)
+}
+
+// Custom
+fun getVersion(): String =
+    with(Properties()) {
+        load(file("version.properties").reader())
+        this["version"] as String
+    }
+
+tasks.register("version") {
+    doLast {
+        println("version=$version")
+    }
+}
+
+tasks.register("setVersion") {
+    doLast {
+        val version = properties["version-name"] as? String
+        if (version != null) {
+            with(Properties()) {
+                load(file("version.properties").reader())
+                this["version"] = version
+                store(file("version.properties").writer(), null)
+            }
+        } else {
+            error("version-name property not found")
+        }
+
+    }
 }

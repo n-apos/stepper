@@ -1,8 +1,17 @@
 name: Test and Analyze
 
 on:
-  pull_request:
-    branches: [ main, develop ]
+  workflow_call:
+    inputs:
+      sha:
+        description: 'The git SHA to check out'
+        required: true
+        type: string
+    secrets:
+      SONAR_TOKEN:
+        required: true
+      SONAR_HOST_URL:
+        required: true
 
 jobs:
   test:
@@ -12,6 +21,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
+          ref: ${{ inputs.sha }}
           fetch-depth: 0 # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Set up JDK 17

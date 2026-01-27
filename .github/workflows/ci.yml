@@ -1,0 +1,18 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+    with:
+      sha: ${{ github.event.pull_request.head.sha }}
+    secrets: inherit
+
+  build:
+    needs: test
+    uses: ./.github/workflows/build.yml
+    with:
+      sha: ${{ github.event.pull_request.head.sha }}
