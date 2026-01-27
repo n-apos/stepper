@@ -7,9 +7,6 @@ on:
         description: 'The git ref to checkout and extract version from'
         required: true
         type: string
-    secrets:
-      GITHUB_TOKEN:
-        required: true
     outputs:
       version:
         description: "The new version number"
@@ -25,16 +22,22 @@ jobs:
       version: ${{ steps.extract_version.outputs.version }}
       sha: ${{ steps.commit_and_push.outputs.sha }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          ref: ${{ inputs.ref }}
-          fetch-depth: 0 # Required to push
+      - name: Display token
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }}
+
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#        with:
+#          token: ${{ secrets.GITHUB_TOKEN }}
+#          ref: ${{ inputs.ref }}
+#          fetch-depth: 0 # Required to push
 
       - name: Extract version from branch name
         id: extract_version
-        run: echo "version=${{ inputs.ref#refs/heads/release/ }}" >> $GITHUB_OUTPUT
+        run: |
+          echo ${{ inputs.ref }}
+#          echo "version=${{ inputs.ref refs/heads/release/ }}" >> $GITHUB_OUTPUT
 
       - name: Update version.properties
         run: ./gradlew setVersion -Pversion=${{ steps.extract_version.outputs.version }}

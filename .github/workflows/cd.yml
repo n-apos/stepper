@@ -10,7 +10,10 @@ jobs:
     uses: ./.github/workflows/test.yml
     with:
       sha: ${{ github.sha }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
     secrets: inherit
+  
 
   build:
     needs: test

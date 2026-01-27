@@ -12,7 +12,7 @@ on:
         required: true
         type: string
     secrets:
-      GITHUB_TOKEN:
+      token:
         required: true
 
 jobs:
@@ -46,8 +46,6 @@ jobs:
       - name: Publish to GitHub Package Registry
         if: steps.cache-restore.outputs.cache-hit == 'true'
         run: ./gradlew publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     runs-on: self-hosted
@@ -85,5 +83,3 @@ jobs:
             **/build/libs/*
             **/build/bin/**/*
             **/build/wasm/*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
