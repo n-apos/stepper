@@ -12,13 +12,11 @@ on:
         required: true
         type: string
     secrets:
+      GRADLE_SECRET_PROPERTIES:
+        required: true
       GPG_SIGNING_KEY:
         required: true
       GPG_PASSPHRASE:
-        required: true
-      SONATYPE_USERNAME:
-        required: true
-      SONATYPE_PASSWORD:
         required: true
 
 jobs:
@@ -43,6 +41,7 @@ jobs:
         run: |
           echo "${{ secrets.GRADLE_SECRET_PROPERTIES }}" >> gradle.properties
           printf "%s\n" "${{ secrets.GPG_SIGNING_KEY }}" | gpg --batch --import
+          cat gradle.properties
         env:
           GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
 
@@ -53,17 +52,13 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Publish "core" to Maven Central
-        run: ./gradlew :core:publish
+        run: ./gradlew :core:publishToMavenCentral --no-configuration-cache
         env:
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Publish "compose" to Maven Central
-        run: ./gradlew :compose:publish
+        run: ./gradlew :compose:publishToMavenCentral --no-configuration-cache
         env:
-          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
           SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
 
   release:
@@ -82,9 +77,6 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
-
-      - name: Build artifacts
-        run: ./gradlew assemble
 
       - name: Create Release and Upload Artifacts
         uses: softprops/action-gh-release@v1

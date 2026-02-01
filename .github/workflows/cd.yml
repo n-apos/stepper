@@ -36,7 +36,6 @@ jobs:
       sha: ${{ needs.bump_version.outputs.sha }}
       version: ${{ needs.bump_version.outputs.version }}
     secrets:
+      GRADLE_SECRET_PROPERTIES: ${{ secrets.GRADLE_SECRET_PROPERTIES }}
       GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
       GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-      SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
