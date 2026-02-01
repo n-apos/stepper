@@ -14,6 +14,10 @@ lifecycleCompose = "2.8.0"
 sonar = "7.2.2.6593"
 kover = "0.9.4"
 
+dokka = "2.1.0"
+
+publish = "0.34.0"
+
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -39,3 +43,7 @@ jetbrains-compiler-compose = { id = "org.jetbrains.kotlin.plugin.compose", versi
 
 sonar = { id = "org.sonarqube", version.ref = "sonar" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+
+publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }

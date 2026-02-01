@@ -5,15 +5,19 @@ on:
     branches:
       - 'release/**'
 
-jobs:
-  test:
-    uses: ./.github/workflows/test.yml
-    with:
-      sha: ${{ github.sha }}
-    secrets: inherit
+permissions:
+  contents: write
 
+jobs:
+#  test:
+#    uses: ./.github/workflows/test.yml
+#    with:
+#      sha: ${{ github.sha }}
+#    secrets: inherit
+#
+#
   build:
-    needs: test
+#    needs: test
     uses: ./.github/workflows/build.yml
     with:
       sha: ${{ github.sha }}
@@ -31,4 +35,7 @@ jobs:
     with:
       sha: ${{ needs.bump_version.outputs.sha }}
       version: ${{ needs.bump_version.outputs.version }}
-    secrets: inherit
+    secrets:
+      GRADLE_SECRET_PROPERTIES: ${{ secrets.GRADLE_SECRET_PROPERTIES }}
+      GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+      GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}

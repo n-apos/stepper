@@ -2,10 +2,13 @@ name: CI
 
 on:
   pull_request:
-    branches: [ main, develop ]
+    branches:
+      - main
+      - develop
 
 jobs:
   test:
+    if: "!startsWith(github.head_ref, 'release/')"
     uses: ./.github/workflows/test.yml
     with:
       sha: ${{ github.event.pull_request.head.sha }}

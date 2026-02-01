@@ -7,6 +7,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.testTag
 
+/**
+ * A composable that renders the line connecting two steps in the stepper.
+ *
+ * The appearance of the link is determined by the [state] of the step it precedes
+ * and is customized by the [LocalStepProperties] and [LocalStepColors] provided by the [Stepper] component.
+ *
+ * @param state The [StepState] of the step this link connects to. The color of the link is determined by this state.
+ */
 @Composable
 public fun StepLink(state: StepState) {
     val properties = LocalStepProperties.current

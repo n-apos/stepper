@@ -5,12 +5,15 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.multiplatform) apply false
     alias(libs.plugins.jetbrains.compose) apply false
     alias(libs.plugins.jetbrains.compiler.compose) apply false
+    alias(libs.plugins.publish) apply false
     alias(libs.plugins.kover)
     alias(libs.plugins.sonar)
+    alias(libs.plugins.dokka)
+    signing
 }
 
 
-group = "com.napos"
+group = "com.n-apos.stepper"
 version = getVersion()
 
 
@@ -63,6 +66,9 @@ tasks.withType<SonarTask> {
 dependencies {
     kover(projects.core)
     kover(projects.compose)
+
+    dokka(projects.core)
+    dokka(projects.compose)
 }
 
 // Custom
