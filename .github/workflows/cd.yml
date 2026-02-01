@@ -9,15 +9,14 @@ permissions:
   contents: write
 
 jobs:
-#  test:
-#    uses: ./.github/workflows/test.yml
-#    with:
-#      sha: ${{ github.sha }}
-#    secrets: inherit
-#
-#
+  test:
+    uses: ./.github/workflows/test.yml
+    with:
+      sha: ${{ github.sha }}
+    secrets: inherit
+
   build:
-#    needs: test
+    needs: test
     uses: ./.github/workflows/build.yml
     with:
       sha: ${{ github.sha }}
