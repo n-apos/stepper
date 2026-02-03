@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   test:
+    if: "!contains(github.event.head_commit.message, 'chore(bump_version):')"
     uses: ./.github/workflows/test.yml
     with:
       sha: ${{ github.sha }}
