@@ -1,3 +1,7 @@
+import org.gradle.internal.impldep.org.eclipse.jgit.api.Git
+import org.gradle.internal.impldep.org.eclipse.jgit.storage.file.FileRepositoryBuilder
+import org.jetbrains.changelog.ChangelogSectionUrlBuilder
+import org.jetbrains.changelog.date
 import org.jetbrains.kotlin.konan.properties.Properties
 import org.sonarqube.gradle.SonarTask
 
@@ -6,6 +10,7 @@ plugins {
     alias(libs.plugins.jetbrains.compose) apply false
     alias(libs.plugins.jetbrains.compiler.compose) apply false
     alias(libs.plugins.publish) apply false
+    alias(libs.plugins.changelog)
     alias(libs.plugins.kover)
     alias(libs.plugins.sonar)
     alias(libs.plugins.dokka)
@@ -57,6 +62,10 @@ sonar {
             "${layout.buildDirectory.get()}/reports/kover/coverage.xml"
         )
     }
+}
+
+changelog {
+    header = provider { "[${version.get()}] - ${date()}" }
 }
 
 tasks.withType<SonarTask> {

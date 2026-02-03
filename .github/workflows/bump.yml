@@ -41,12 +41,16 @@ jobs:
       - name: Update version.properties
         run: ./gradlew setVersion -Pversion-name=${{ steps.extract_version.outputs.version }}
 
+      - name: Patch changelog
+        run: ./gradlew patchChangelog
+
       - name: Commit, Tag and Push
         id: commit_and_push
         run: |
           git config --local user.name 'github-actions[bot]'
           git config --local user.email 'github-actions[bot]@users.noreply.github.com'
           git add version.properties
+          git add CHANGELOG.md
           git commit -m "chore(bump_version): Bump version to ${{ steps.extract_version.outputs.version }}"
           echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           git tag "v${{ steps.extract_version.outputs.version }}"

@@ -77,10 +77,14 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        
+      - name: Generate release notes
+        run: ./gradlew getChangelog -q | sed '1d' > release_notes.md
 
       - name: Create Release and Upload Artifacts
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ inputs.version }}
+          body_path: release_notes.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
