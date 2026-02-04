@@ -7,6 +7,11 @@ on:
         description: 'The git SHA to check out'
         required: true
         type: string
+    secrets:
+      SONAR_HOST_URL:
+        required: true
+      SONAR_TOKEN:
+        required: true
 
 jobs:
   test:
@@ -32,10 +37,12 @@ jobs:
         run: xvfb-run ./gradlew jvmTest
 
       - name: Generate Gradle dependency verification metadata
-        run: ./gradlew --write-verification-metadata sha256,pgp help
+        run: ./gradlew --refresh-dependencies --write-verification-metadata sha256,pgp help
 
       - name: Run SonarQube analysis
-        run: ./gradlew sonar || true
+        run: |
+          echo $SONAR_HOST_URL
+          ./gradlew sonar || true
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

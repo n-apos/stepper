@@ -20,7 +20,7 @@ publish = "0.34.0"
 
 changelog = "2.5.0"
 
-version = "0.2.0"
+version = "0.2.1"
 
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }

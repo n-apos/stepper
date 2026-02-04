@@ -70,4 +70,5 @@ jobs:
           git commit -m "chore(bump_version): Bump version to ${{ steps.extract_version.outputs.version }}"
           echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           git tag "v${{ steps.extract_version.outputs.version }}"
-          git push --follow-tags
+          git push
+          git push --tags

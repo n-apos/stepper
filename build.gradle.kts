@@ -63,12 +63,14 @@ tasks.withType<SonarTask> {
     dependsOn("koverXmlReport")
 }
 
-changelog {
-    header = provider { "[${version.get()}] - ${date()}" }
-}
-
 semanticVersion {
     location = "version.properties"
+    rootProject.version = resolvedVersion
+}
+
+changelog {
+    version = rootProject.version.toString()
+    header = provider { "[${version.get()}] - ${date()}" }
 }
 
 dependencies {
