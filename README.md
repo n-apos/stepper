@@ -117,7 +117,7 @@ class MyScreenProvider : MilestoneScreenProvider() {
             is FirstMilestone -> FirstScreen(milestone)
             is SecondMilestone -> SecondScreen(milestone)
             is ThirdMilestone -> ThirdScreen(milestone)
-            else -> error("Milestone not supported: ${milestone.title}")
+            else -> error("Milestone not supported: ${milestone::class.simpleName}")
         }
     }
 }
@@ -125,15 +125,18 @@ class MyScreenProvider : MilestoneScreenProvider() {
 // FirstScreen, SecondScreen, etc. are implementations of MilestoneScreen
 // which provides the actual @Composable content for that step.
 // For example:
-class FirstScreen(override val milestone: FirstMilestone) : MilestoneScreen<FirstData, FirstMilestone> {
+class FirstScreen(
+    override val milestone: FirstMilestone, 
+    override val viewModel: MilestoneViewModel
+) : MilestoneScreen<FirstMilestone, MilestoneViewModel> {
+    
     @Composable
-    override val title
-        get(): String = "First Step"
+    override fun title(): String = "First Step"
     
     @Composable
     override fun render() {
         // Build your UI for the "First" step here.
-        Text("This is the UI for the first step: ${milestone.title}")
+        Text("This is the UI for the first step: ${title()}")
     }
 }
 

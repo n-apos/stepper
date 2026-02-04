@@ -50,7 +50,7 @@ jobs:
       - name: Promote version
         if: "contains(github.ref, 'release/promote')"
         run: |
-          ./gradlew incrementVersion --type=PROMOTE
+          ./gradlew promoteVersion
 
       - name: Extract version
         id: extract_version
