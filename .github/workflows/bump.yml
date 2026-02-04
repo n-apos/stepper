@@ -31,15 +31,40 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Update version - major
+        if: contains(github.ref, 'release/major')
+        run: |
+          ./gradlew incrementVersion --type=MAJOR
 
-      - name: Extract version from branch name
+      - name: Update version - minor
+        if: contains(github.ref, 'release/minor')
+        run: |
+          ./gradlew incrementVersion --type=MINOR
+
+      - name: Update version - patch
+        if: contains(github.ref, 'release/patch')
+        run: |
+          ./gradlew incrementVersion --type=PATCH
+        
+      - name: Update version - suffix
+        if: contains(github.ref, 'release/suffix')
+        run: |
+          ./gradlew incrementVersion --type=SUFFIX
+
+      - name: Update version - suffix increment
+        if: contains(github.ref, 'release/suffix-increment')
+        run: |
+          ./gradlew incrementVersion --type=SUFFIX_INCREMENT
+
+      - name: Update version - promote
+        if: contains(github.ref, 'release/promote')
+        run: |
+          ./gradlew incrementVersion --type=PROMOTE
+
+      - name: Extract version
         id: extract_version
         run: |
-          ref=$GITHUB_REF_NAME
-          echo "version=$(echo $ref | sed 's/release\///')" >> $GITHUB_OUTPUT
-
-      - name: Update version.properties
-        run: ./gradlew setVersion -Pversion-name=${{ steps.extract_version.outputs.version }}
+          echo "version=$(./gradlew printVersion -q | sed '1d')" >> $GITHUB_OUTPUT
 
       - name: Patch changelog
         run: ./gradlew patchChangelog

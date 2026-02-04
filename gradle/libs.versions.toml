@@ -20,6 +20,8 @@ publish = "0.34.0"
 
 changelog = "2.5.0"
 
+version = "0.2.0"
+
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinSerialization" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -51,3 +53,5 @@ dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 publish = { id = "com.vanniktech.maven.publish", version.ref = "publish" }
 
 changelog = { id = "org.jetbrains.changelog", version.ref = "changelog" }
+
+version = { id = "com.n-apos.version", version.ref = "version" }

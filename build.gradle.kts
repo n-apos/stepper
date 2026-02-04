@@ -1,8 +1,4 @@
-import org.gradle.internal.impldep.org.eclipse.jgit.api.Git
-import org.gradle.internal.impldep.org.eclipse.jgit.storage.file.FileRepositoryBuilder
-import org.jetbrains.changelog.ChangelogSectionUrlBuilder
 import org.jetbrains.changelog.date
-import org.jetbrains.kotlin.konan.properties.Properties
 import org.sonarqube.gradle.SonarTask
 
 plugins {
@@ -11,6 +7,7 @@ plugins {
     alias(libs.plugins.jetbrains.compiler.compose) apply false
     alias(libs.plugins.publish) apply false
     alias(libs.plugins.changelog)
+    alias(libs.plugins.version)
     alias(libs.plugins.kover)
     alias(libs.plugins.sonar)
     alias(libs.plugins.dokka)
@@ -19,8 +16,6 @@ plugins {
 
 
 group = "com.n-apos.stepper"
-version = getVersion()
-
 
 allprojects {
     repositories {
@@ -64,12 +59,16 @@ sonar {
     }
 }
 
+tasks.withType<SonarTask> {
+    dependsOn("koverXmlReport")
+}
+
 changelog {
     header = provider { "[${version.get()}] - ${date()}" }
 }
 
-tasks.withType<SonarTask> {
-    dependsOn("koverXmlReport")
+semanticVersion {
+    location = "version.properties"
 }
 
 dependencies {
@@ -81,30 +80,30 @@ dependencies {
 }
 
 // Custom
-fun getVersion(): String =
-    with(Properties()) {
-        load(file("version.properties").reader())
-        this["version"] as String
-    }
-
-tasks.register("version") {
-    doLast {
-        println("version=$version")
-    }
-}
-
-tasks.register("setVersion") {
-    doLast {
-        val version = properties["version-name"] as? String
-        if (version != null) {
-            with(Properties()) {
-                load(file("version.properties").reader())
-                this["version"] = version
-                store(file("version.properties").writer(), null)
-            }
-        } else {
-            error("version-name property not found")
-        }
-
-    }
-}
+//fun getVersion(): String =
+//    with(Properties()) {
+//        load(file("version.properties").reader())
+//        this["version"] as String
+//    }
+//
+//tasks.register("version") {
+//    doLast {
+//        println("version=$version")
+//    }
+//}
+//
+//tasks.register("setVersion") {
+//    doLast {
+//        val version = properties["version-name"] as? String
+//        if (version != null) {
+//            with(Properties()) {
+//                load(file("version.properties").reader())
+//                this["version"] = version
+//                store(file("version.properties").writer(), null)
+//            }
+//        } else {
+//            error("version-name property not found")
+//        }
+//
+//    }
+//}
