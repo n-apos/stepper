@@ -32,10 +32,10 @@ jobs:
         run: xvfb-run ./gradlew jvmTest
 
       - name: Generate Gradle dependency verification metadata
-        run: ./gradlew --write-verification-metadata sha256,pgp help
+        run: ./gradlew --refresh-dependencies --write-verification-metadata sha256,pgp help
 
       - name: Run SonarQube analysis
-        run: ./gradlew sonar || true
+        run: ./gradlew sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}

@@ -5,7 +5,9 @@
 ### Added
 
 ### Changed
-
+- Integrated semantic version plugin
+- Updated CI/CD workflows
+- Updated readme
 ### Deprecated
 
 ### Removed
