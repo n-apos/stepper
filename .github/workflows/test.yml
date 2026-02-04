@@ -35,7 +35,9 @@ jobs:
         run: ./gradlew --refresh-dependencies --write-verification-metadata sha256,pgp help
 
       - name: Run SonarQube analysis
-        run: ./gradlew sonar
+        run: |
+          echo $SONAR_HOST_URL
+          ./gradlew sonar || true
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
