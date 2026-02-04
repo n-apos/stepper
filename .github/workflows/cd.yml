@@ -3,12 +3,7 @@ name: CD
 on:
   push:
     branches:
-      - 'release/major'
-      - 'release/minor'
-      - 'release/patch'
-      - 'release/suffix'
-      - 'release/suffix-increment'
-      - 'release/promote'
+      - 'release/**'
 
 permissions:
   contents: write

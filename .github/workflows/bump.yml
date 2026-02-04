@@ -31,33 +31,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update version - major
-        if: contains(github.ref, 'release/major')
+      - name: Update version
+        if: "!contains(github.ref, 'release/promote')"
         run: |
-          ./gradlew incrementVersion --type=MAJOR
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          TYPE=${BRANCH_NAME#release/}
+          
+          # Convert to uppercase
+          INCREMENT_TYPE=$(echo "$TYPE" | tr '[:lower:]' '[:upper:]')
+          
+          # Replace hyphens with underscores (e.g. SUFFIX-INCREMENT -> SUFFIX_INCREMENT)
+          INCREMENT_TYPE=${INCREMENT_TYPE//-/_}
+          
+          echo "Applying increment type: $INCREMENT_TYPE"
+          
+          ./gradlew incrementVersion --type=$INCREMENT_TYPE
 
-      - name: Update version - minor
-        if: contains(github.ref, 'release/minor')
-        run: |
-          ./gradlew incrementVersion --type=MINOR
-
-      - name: Update version - patch
-        if: contains(github.ref, 'release/patch')
-        run: |
-          ./gradlew incrementVersion --type=PATCH
-        
-      - name: Update version - suffix
-        if: contains(github.ref, 'release/suffix')
-        run: |
-          ./gradlew incrementVersion --type=SUFFIX
-
-      - name: Update version - suffix increment
-        if: contains(github.ref, 'release/suffix-increment')
-        run: |
-          ./gradlew incrementVersion --type=SUFFIX_INCREMENT
-
-      - name: Update version - promote
-        if: contains(github.ref, 'release/promote')
+      - name: Promote version
+        if: "contains(github.ref, 'release/promote')"
         run: |
           ./gradlew incrementVersion --type=PROMOTE
 
