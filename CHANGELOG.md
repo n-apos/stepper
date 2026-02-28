@@ -3,9 +3,10 @@
 ## Unreleased
 
 ### Added
-
+- New `isRelease` flag to determine which core dependency to use in compose module
+- Stepper as a library in version catalogs
 ### Changed
-
+- Updated `README.md` with actual version names and library namespace
 ### Deprecated
 
 ### Removed
@@ -14,7 +15,7 @@
 
 ### Security
 
-## [0.1.2] - 2026-02-04
+## [0.2.0] - 2026-02-04
 
 ### Changed
 
