@@ -57,7 +57,7 @@ jobs:
           SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Publish "compose" to Maven Central
-        run: ./gradlew :compose:publishToMavenCentral --no-configuration-cache
+        run: ./gradlew :compose:publishToMavenCentral --no-configuration-cache -PisRelease=true
         env:
           SIGNING_PASSWORD: ${{ secrets.GPG_PASSPHRASE }}
 

@@ -48,10 +48,10 @@ To use this library in your project, add the following dependencies to your `bui
 ```kotlin
 dependencies {
     // For the core business logic
-    implementation(projects.core)
+    implementation("com.n-apos.stepper:stepper-core:0.2.0")
 
     // For the Compose UI components
-    implementation(projects.compose)
+    implementation("com.n-apos.stepper:stepper-compose:0.2.0")
 }
 ```
 

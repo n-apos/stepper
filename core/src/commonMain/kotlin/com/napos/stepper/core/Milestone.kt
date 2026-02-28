@@ -26,6 +26,7 @@ public abstract class Milestone<T : MilestoneData> {
      */
     public abstract var next: Milestone<*>?
 
+    @Suppress("UNCHECKED_CAST")
     private val _clazz: KClass<T> = this::class as KClass<T>
 
     /**

@@ -1,4 +1,3 @@
-
 @file:OptIn(ExperimentalDistributionDsl::class)
 
 import org.jetbrains.compose.ExperimentalComposeLibrary
@@ -56,6 +55,12 @@ configure<SigningExtension> {
     sign(extensions.getByType(PublishingExtension::class.java).publications)
 }
 
+
+val isRelease: Boolean
+    get() = providers
+        .gradleProperty("isRelease").getOrElse("false")
+        .toBooleanStrict()
+
 kotlin {
     explicitApi()
 
@@ -85,7 +90,11 @@ kotlin {
 
 
         commonMain.dependencies {
-            api(projects.core)
+            if (isRelease) {
+                api(libs.stepper.core)
+            } else {
+                api(projects.core)
+            }
 
             implementation(compose.ui)
             implementation(compose.runtime)
