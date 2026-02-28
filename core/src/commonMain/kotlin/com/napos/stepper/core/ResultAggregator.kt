@@ -44,7 +44,7 @@ public inline fun <@AggregationResult reified R> aggregate(
     val result = buildJsonObject {
         var current: Milestone<*>? = root
         while (current != null) {
-            if (current.data == null) throw IllegalStateException("All steps should contain data before the aggregation attempt occurs")
+            require (current.data != null) { "All steps should contain data before the aggregation attempt occurs" }
             val serializer = current.data!!::class.serializer()
             put(
                 key = serializer.descriptor.serialName,
