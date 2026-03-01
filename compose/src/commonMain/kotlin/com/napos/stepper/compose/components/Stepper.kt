@@ -47,29 +47,28 @@ public fun Stepper(
         composable("preview") {
             StepperTemplate(
                 roadmap = roadmap,
-                provider = provider,
                 type = StepperContentType.Preview,
                 onStart = {
                     navController.navigate("stepper_screen")
                 },
-                properties = properties,
-                colors = colors,
                 onNext = {},
                 onPrevious = {},
                 onSubmit = {},
                 modifier = modifier,
+                properties = properties,
+                colors = colors,
                 components = components,
-            ) {
-                PreviewScreen(
-                    roadmap = roadmap,
-                    provider = provider,
-                )
-            }
+                {
+                    PreviewScreen(
+                        roadmap = roadmap,
+                        provider = provider,
+                    )
+                },
+            )
         }
         composable("stepper_screen") {
             StepperTemplate(
                 roadmap = roadmap,
-                provider = provider,
                 type = StepperContentType.Step,
                 onStart = {
                     navController.navigate("stepper_screen")
@@ -91,11 +90,12 @@ public fun Stepper(
                 },
                 modifier = modifier,
                 components = components,
-            ) {
-                StepScreen(
-                    screen = provider.provide(roadmap.getCurrent()),
-                )
-            }
+                content = {
+                    StepScreen(
+                        screen = provider.provide(roadmap.getCurrent()),
+                    )
+                },
+            )
         }
     }
 

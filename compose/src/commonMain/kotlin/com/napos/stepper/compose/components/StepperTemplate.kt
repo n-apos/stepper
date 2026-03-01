@@ -17,9 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.napos.stepper.compose.Res
-import com.napos.stepper.compose.screen.MilestoneScreenProvider
 import com.napos.stepper.compose.stepper_edit_button
 import com.napos.stepper.compose.stepper_start_button
+import com.napos.stepper.core.Milestone
 import com.napos.stepper.core.Roadmap
 import org.jetbrains.compose.resources.stringResource
 
@@ -31,7 +31,6 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 public fun StepperTemplate(
     roadmap: Roadmap,
-    provider: MilestoneScreenProvider,
     type: StepperContentType,
     onStart: () -> Unit,
     onNext: () -> Unit,
@@ -44,12 +43,12 @@ public fun StepperTemplate(
     content: @Composable () -> Unit,
 ) {
     val current by roadmap.current.collectAsState(null)
-    val properties = LocalStepProperties.current
 
     CompositionLocalProvider(
         LocalStepProperties provides properties,
         LocalStepColors provides colors,
     ) {
+        val currentProperties = LocalStepProperties.current
         Box(
             modifier = Modifier.fillMaxHeight()
                 .width(IntrinsicSize.Max)
@@ -63,26 +62,12 @@ public fun StepperTemplate(
                     .align(Alignment.TopCenter),
             ) {
                 if (type == StepperContentType.Step) {
-                    Row(
-                        modifier = Modifier
-                            .width(properties.size * (roadmap.size * 2 - 1))
-                            .weight(0.1f),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        val currentIndex = roadmap.currentIndex
-                        roadmap.milestones.forEachIndexed { index, _ ->
-                            val state = when {
-                                index < currentIndex -> StepState.Passed
-                                index == currentIndex -> StepState.Current
-                                else -> StepState.Coming
-                            }
-                            if (index != 0) {
-                                components.stepLink(state)
-                            }
-                            components.step(state)
-                        }
-                    }
+                    StepperHeader(
+                        modifier = Modifier.weight(0.1f),
+                        roadmap = roadmap,
+                        properties = currentProperties,
+                        components = components
+                    )
                 }
 
                 Column(
@@ -95,45 +80,94 @@ public fun StepperTemplate(
                     content()
                 }
 
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.End),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(0.1f),
-                ) {
+                StepperFooter(
+                    modifier = Modifier.weight(0.1f),
+                    type = type,
+                    roadmap = roadmap,
+                    current = current,
+                    onStart = onStart,
+                    onNext = onNext,
+                    onPrevious = onPrevious,
+                    onSubmit = onSubmit,
+                    components = components
+                )
+            }
+        }
+    }
+}
 
-                    when (type) {
-                        StepperContentType.Preview -> {
-                            val text = if (roadmap.milestones.all { it.data == null }) {
-                                stringResource(Res.string.stepper_start_button)
-                            } else {
-                                stringResource(Res.string.stepper_edit_button)
-                            }
-                            components.startButton(text) {
-                                onStart()
-                            }
-                        }
+@Composable
+public fun StepperHeader(
+    roadmap: Roadmap,
+    properties: StepProperties,
+    components: StepperComponents,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .width(properties.size * (roadmap.size * 2 - 1)),
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        val currentIndex = roadmap.currentIndex
+        roadmap.milestones.forEachIndexed { index, _ ->
+            val state = when {
+                index < currentIndex -> StepState.Passed
+                index == currentIndex -> StepState.Current
+                else -> StepState.Coming
+            }
+            if (index != 0) {
+                components.stepLink(state)
+            }
+            components.step(state)
+        }
+    }
+}
 
-                        StepperContentType.Step -> {
-                            current?.previous?.let {
-                                components.previousButton {
-                                    onPrevious()
-                                }
-                            }
-                            current?.next?.let {
-                                components.nextButton {
-                                    onNext()
-                                }
-                            } ?: run {
-                                components.submitButton {
-                                    onSubmit()
-                                }
-                            }
-                        }
+@Composable
+public fun StepperFooter(
+    type: StepperContentType,
+    roadmap: Roadmap,
+    current: Milestone<*>?,
+    onStart: () -> Unit,
+    onNext: () -> Unit,
+    onPrevious: () -> Unit,
+    onSubmit: () -> Unit,
+    components: StepperComponents,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.End),
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        when (type) {
+            StepperContentType.Preview -> {
+                val text = if (roadmap.milestones.all { it.data == null }) {
+                    stringResource(Res.string.stepper_start_button)
+                } else {
+                    stringResource(Res.string.stepper_edit_button)
+                }
+                components.startButton(text) {
+                    onStart()
+                }
+            }
+
+            StepperContentType.Step -> {
+                current?.previous?.let {
+                    components.previousButton {
+                        onPrevious()
+                    }
+                }
+                current?.next?.let {
+                    components.nextButton {
+                        onNext()
+                    }
+                } ?: run {
+                    components.submitButton {
+                        onSubmit()
                     }
                 }
             }
         }
     }
-
 }

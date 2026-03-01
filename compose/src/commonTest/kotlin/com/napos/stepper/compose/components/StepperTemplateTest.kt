@@ -6,7 +6,6 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.runComposeUiTest
 import com.napos.stepper.compose.StepData
-import com.napos.stepper.compose.TestScreenProvider
 import com.napos.stepper.compose.createRoadmap
 import kotlin.test.Test
 
@@ -19,7 +18,6 @@ class StepperTemplateTest {
         setContent {
             StepperTemplate(
                 roadmap = roadmap,
-                provider = TestScreenProvider,
                 type = StepperContentType.Step,
                 onStart = {},
                 onNext = {},
@@ -30,10 +28,11 @@ class StepperTemplateTest {
                     nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
                     previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
                     submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } },
-                )
-            ) {
-                Text("Screen content")
-            }
+                ),
+                content = {
+                    Text("Screen content")
+                }
+            )
         }
 
         onNodeWithText("Screen content").assertExists()
@@ -51,7 +50,6 @@ class StepperTemplateTest {
         setContent {
             StepperTemplate(
                 roadmap = roadmap,
-                provider = TestScreenProvider,
                 type = StepperContentType.Step,
                 onStart = {},
                 onNext = {},
@@ -62,10 +60,11 @@ class StepperTemplateTest {
                     nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
                     previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
                     submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } }
-                )
-            ) {
-                Text("Screen content")
-            }
+                ),
+                content = {
+                    Text("Screen content")
+                }
+            )
         }
 
         onNodeWithText("Screen content").assertExists()
@@ -81,7 +80,6 @@ class StepperTemplateTest {
         setContent {
             StepperTemplate(
                 roadmap = roadmap,
-                provider = TestScreenProvider,
                 type = StepperContentType.Preview,
                 onStart = {},
                 onNext = {},
@@ -95,10 +93,11 @@ class StepperTemplateTest {
                     nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
                     previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
                     submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } },
-                )
-            ) {
-                Text("Preview")
-            }
+                ),
+                content = {
+                    Text("Preview")
+                }
+            )
         }
 
         onNodeWithText("Preview").assertExists()
@@ -116,7 +115,6 @@ class StepperTemplateTest {
         setContent {
             StepperTemplate(
                 roadmap = roadmap,
-                provider = TestScreenProvider,
                 type = StepperContentType.Preview,
                 onStart = {},
                 onNext = {},
@@ -127,10 +125,11 @@ class StepperTemplateTest {
                     nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
                     previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
                     submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } },
-                )
-            ) {
-                Text(roadmap.getCurrent().data.toString())
-            }
+                ),
+                content = {
+                    Text(roadmap.getCurrent().data.toString())
+                }
+            )
         }
 
         onNodeWithText(data.toString()).assertExists()
