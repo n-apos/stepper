@@ -1,31 +1,14 @@
 package com.napos.stepper.compose.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import com.napos.stepper.core.Roadmap
-import com.napos.stepper.compose.Res
+import androidx.compose.ui.backhandler.BackHandler
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.napos.stepper.compose.screen.MilestoneScreenProvider
-import com.napos.stepper.compose.stepper_next_button
-import com.napos.stepper.compose.stepper_previous_button
-import com.napos.stepper.compose.stepper_submit_button
-import org.jetbrains.compose.resources.stringResource
+import com.napos.stepper.core.Roadmap
 
 /**
  * A composable that provides a complete stepper UI, including step indicators, content, and navigation buttons.
@@ -39,12 +22,9 @@ import org.jetbrains.compose.resources.stringResource
  * @param modifier The [Modifier] to be applied to the stepper container.
  * @param properties The [StepProperties] to customize the appearance of the step indicators.
  * @param colors The [StepColors] to customize the colors of the step indicators and links.
- * @param step A composable lambda for rendering a single step indicator. Defaults to [Step].
- * @param stepLink A composable lambda for rendering the link between steps. Defaults to [StepLink].
- * @param nextButton A composable lambda for the 'Next' button.
- * @param previousButton A composable lambda for the 'Previous' button.
- * @param submitButton A composable lambda for the 'Submit' button.
+ * @param components The [StepperComponents] to customize the different parts of the stepper.
  */
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 public fun Stepper(
     roadmap: Roadmap,
@@ -53,113 +33,70 @@ public fun Stepper(
     modifier: Modifier = Modifier,
     properties: StepProperties = StepProperties.Default,
     colors: StepColors = StepColors.Default.defaultColors(),
-    step: @Composable (StepState) -> Unit = { Step(it) },
-    stepLink: @Composable (StepState) -> Unit = { StepLink(it) },
-    nextButton: @Composable (onClick: () -> Unit) -> Unit = {
-        StepButton(
-            text = stringResource(Res.string.stepper_next_button),
-            onClick = it
-        )
-    },
-    previousButton: @Composable (onClick: () -> Unit) -> Unit = {
-        StepButton(
-            text = stringResource(Res.string.stepper_previous_button),
-            onClick = it
-        )
-    },
-    submitButton: @Composable (onClick: () -> Unit) -> Unit = {
-        StepButton(
-            text = stringResource(Res.string.stepper_submit_button),
-            onClick = it
-        )
-    },
+    components: StepperComponents = StepperComponents(),
 ) {
-    val current by roadmap.current.collectAsState(null)
-    val screen = current?.let { provider.provide(it) }
+    val navController = rememberNavController()
 
-    CompositionLocalProvider(
-        LocalStepProperties provides properties,
-        LocalStepColors provides colors,
+    BackHandler {
+        roadmap.previous()
+    }
+    NavHost(
+        navController = navController,
+        startDestination = "preview",
     ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            Column(
-                verticalArrangement = Arrangement.SpaceAround,
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxHeight()
-                    .width(IntrinsicSize.Min)
-                    .align(Alignment.Center),
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(10.dp)
-                        .weight(0.1f),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    val currentIndex = roadmap.currentIndex
-                    roadmap.milestones.forEachIndexed { index, _ ->
-                        val state = when {
-                            index < currentIndex -> StepState.Passed
-                            index == currentIndex -> StepState.Current
-                            else -> StepState.Coming
-                        }
-                        if (index != 0) {
-                            stepLink(state)
-                        }
-                        step(state)
+        composable("preview") {
+            StepperTemplate(
+                roadmap = roadmap,
+                type = StepperContentType.Preview,
+                onStart = {
+                    navController.navigate("stepper_screen")
+                },
+                onNext = {},
+                onPrevious = {},
+                onSubmit = {},
+                modifier = modifier,
+                properties = properties,
+                colors = colors,
+                components = components,
+                {
+                    PreviewScreen(
+                        roadmap = roadmap,
+                        provider = provider,
+                    )
+                },
+            )
+        }
+        composable("stepper_screen") {
+            StepperTemplate(
+                roadmap = roadmap,
+                type = StepperContentType.Step,
+                onStart = {
+                    navController.navigate("stepper_screen")
+                },
+                onNext = {
+                    roadmap.next()
+                    navController.navigate("stepper_screen")
+                },
+                onPrevious = {
+                    roadmap.previous()
+                    navController.popBackStack()
+                },
+                onSubmit = {
+                    onSubmit()
+                    roadmap.milestones.forEach { _ -> roadmap.previous() }
+                    navController.navigate("preview") {
+                        popUpTo("preview") { inclusive = true }
                     }
-                }
-
-                Column(
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(IntrinsicSize.Max)
-                        .padding(10.dp)
-                        .weight(0.8f),
-                ) {
-                    screen?.let {
-                        Row(
-                            horizontalArrangement = Arrangement.Center,
-                            verticalAlignment = Alignment.Top,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(10.dp),
-                        ) {
-                            Text(it.title())
-                        }
-                    }
-                    screen?.render()
-                }
-
-
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(10.dp, alignment = Alignment.End),
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .fillMaxWidth()
-                        .weight(0.1f),
-                ) {
-                    current?.previous?.let {
-                        previousButton {
-                            roadmap.previous()
-                        }
-                    }
-                    current?.next?.let {
-                        nextButton {
-                            roadmap.next()
-                        }
-                    } ?: run {
-                        submitButton {
-                            onSubmit()
-                        }
-                    }
-                }
-            }
+                },
+                modifier = modifier,
+                components = components,
+                content = {
+                    StepScreen(
+                        screen = provider.provide(roadmap.getCurrent()),
+                    )
+                },
+            )
         }
     }
+
 }

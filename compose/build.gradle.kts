@@ -108,6 +108,7 @@ kotlin {
 
             implementation(libs.jetbrains.navigation.compose)
             implementation(libs.jetbrains.lifecycle.compose)
+            implementation(libs.jetbrains.ui.backhandler)
 
         }
 
@@ -119,6 +120,7 @@ kotlin {
 
         commonTest.dependencies {
             implementation(libs.kotlin.test.common)
+            implementation(libs.jetbrains.lifecycle.runtime.compose)
 
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.uiTest)

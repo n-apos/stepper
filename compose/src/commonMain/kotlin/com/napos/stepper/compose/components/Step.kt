@@ -33,27 +33,12 @@ public enum class StepState {
     Coming
 }
 
-/**
- * Defines the position of the title relative to the step indicator.
- */
-public enum class TitlePosition {
-    /**
-     * The title is displayed above the step indicator.
-     */
-    Top,
-
-    /**
-     * The title is displayed below the step indicator.
-     */
-    Bottom,
-    ;
-}
 
 /**
  * A composable that renders a single step indicator in the stepper.
  *
  * The appearance of the step is determined by its [state] and customized by the [LocalStepProperties]
- * and [LocalStepColors] provided by the [Stepper] component.
+ * and [LocalStepColors] provided by the [StepperTemplate] component.
  *
  * @param state The current [StepState] of the step (e.g., Passed, Current, Coming).
  * @param contentDescription An optional description for accessibility services.

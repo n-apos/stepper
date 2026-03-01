@@ -30,4 +30,13 @@ class ThirdScreen(
             label = { Text("Third value") }
         )
     }
+
+    @Composable
+    override fun preview() {
+        milestone.data?.let {
+            Text(it.toString())
+        } ?: run {
+            Text("No data")
+        }
+    }
 }

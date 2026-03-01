@@ -32,4 +32,13 @@ class SecondScreen(
         )
     }
 
+    @Composable
+    override fun preview() {
+        milestone.data?.let {
+            Text(it.toString())
+        } ?: run {
+            Text("No data")
+        }
+    }
+
 }

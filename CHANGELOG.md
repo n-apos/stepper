@@ -5,8 +5,10 @@
 ### Added
 - New `isRelease` flag to determine which core dependency to use in compose module
 - Stepper as a library in version catalogs
+- Added compose navigation to the stepper
 ### Changed
 - Updated `README.md` with actual version names and library namespace
+- Refactored Stepper to be navigation aware and pushed its implementation to StepperTemplate
 ### Deprecated
 
 ### Removed

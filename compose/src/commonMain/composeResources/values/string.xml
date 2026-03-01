@@ -3,4 +3,6 @@
     <string name="stepper_next_button">Next</string>
     <string name="stepper_previous_button">Previous</string>
     <string name="stepper_submit_button">Submit</string>
+    <string name="stepper_start_button">Start</string>
+    <string name="stepper_edit_button">Edit</string>
 </resources>
