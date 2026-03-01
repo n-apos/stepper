@@ -35,4 +35,7 @@ public abstract class MilestoneScreen<M : Milestone<*>, VM : MilestoneViewModel>
      */
     @Composable
     public abstract fun render()
+
+    @Composable
+    public abstract fun preview()
 }

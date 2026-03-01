@@ -38,6 +38,11 @@ class TestScreen(
         Text("Test Screen")
         Text("Content for ${milestone.data?.value}")
     }
+
+    @Composable
+    override fun preview() {
+        Text("Preview for ${milestone.data?.value}")
+    }
 }
 
 val TestScreenProvider = MilestoneScreenProvider { milestone ->

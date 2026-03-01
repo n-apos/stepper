@@ -36,4 +36,13 @@ class FirstScreen(
             label = { Text("First value") }
         )
     }
+
+    @Composable
+    override fun preview() {
+        milestone.data?.let {
+            Text(it.toString())
+        } ?: run {
+            Text("No data")
+        }
+    }
 }
