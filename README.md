@@ -1,6 +1,11 @@
 # Stepper
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=n-apos_stepper&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=n-apos_stepper)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=n-apos_stepper&metric=coverage)](https://sonarcloud.io/summary/new_code?id=n-apos_stepper)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=n-apos_stepper&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=n-apos_stepper)
+
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=n-apos_stepper&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=n-apos_stepper)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=n-apos_stepper&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=n-apos_stepper)
 
 A Kotlin Multiplatform project demonstrating a custom stepper component built with Jetpack Compose.
 
