@@ -7,13 +7,8 @@ import androidx.compose.ui.backhandler.BackHandler
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.napos.stepper.compose.Res
 import com.napos.stepper.compose.screen.MilestoneScreenProvider
-import com.napos.stepper.compose.stepper_next_button
-import com.napos.stepper.compose.stepper_previous_button
-import com.napos.stepper.compose.stepper_submit_button
 import com.napos.stepper.core.Roadmap
-import org.jetbrains.compose.resources.stringResource
 
 /**
  * A composable that provides a complete stepper UI, including step indicators, content, and navigation buttons.
@@ -27,12 +22,7 @@ import org.jetbrains.compose.resources.stringResource
  * @param modifier The [Modifier] to be applied to the stepper container.
  * @param properties The [StepProperties] to customize the appearance of the step indicators.
  * @param colors The [StepColors] to customize the colors of the step indicators and links.
- * @param step A composable lambda for rendering a single step indicator. Defaults to [Step].
- * @param stepLink A composable lambda for rendering the link between steps. Defaults to [StepLink].
- * @param startButton A composable lambda for the 'Start' button.
- * @param nextButton A composable lambda for the 'Next' button.
- * @param previousButton A composable lambda for the 'Previous' button.
- * @param submitButton A composable lambda for the 'Submit' button.
+ * @param components The [StepperComponents] to customize the different parts of the stepper.
  */
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -43,32 +33,7 @@ public fun Stepper(
     modifier: Modifier = Modifier,
     properties: StepProperties = StepProperties.Default,
     colors: StepColors = StepColors.Default.defaultColors(),
-    step: @Composable (StepState) -> Unit = { Step(it) },
-    stepLink: @Composable (StepState) -> Unit = { StepLink(it) },
-    startButton: @Composable (text: String, onClick: () -> Unit) -> Unit = { text, onClick ->
-        StepButton(
-            text = text,
-            onClick = onClick,
-        )
-    },
-    nextButton: @Composable (onClick: () -> Unit) -> Unit = {
-        StepButton(
-            text = stringResource(Res.string.stepper_next_button),
-            onClick = it
-        )
-    },
-    previousButton: @Composable (onClick: () -> Unit) -> Unit = {
-        StepButton(
-            text = stringResource(Res.string.stepper_previous_button),
-            onClick = it
-        )
-    },
-    submitButton: @Composable (onClick: () -> Unit) -> Unit = {
-        StepButton(
-            text = stringResource(Res.string.stepper_submit_button),
-            onClick = it
-        )
-    },
+    components: StepperComponents = StepperComponents(),
 ) {
     val navController = rememberNavController()
 
@@ -93,12 +58,7 @@ public fun Stepper(
                 onPrevious = {},
                 onSubmit = {},
                 modifier = modifier,
-                step = step,
-                stepLink = stepLink,
-                startButton = startButton,
-                nextButton = nextButton,
-                previousButton = previousButton,
-                submitButton = submitButton,
+                components = components,
             ) {
                 PreviewScreen(
                     roadmap = roadmap,
@@ -130,12 +90,7 @@ public fun Stepper(
                     }
                 },
                 modifier = modifier,
-                step = step,
-                stepLink = stepLink,
-                startButton = startButton,
-                nextButton = nextButton,
-                previousButton = previousButton,
-                submitButton = submitButton,
+                components = components,
             ) {
                 StepScreen(
                     screen = provider.provide(roadmap.getCurrent()),

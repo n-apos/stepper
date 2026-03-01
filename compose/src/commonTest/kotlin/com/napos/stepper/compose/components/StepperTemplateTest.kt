@@ -25,10 +25,12 @@ class StepperTemplateTest {
                 onNext = {},
                 onPrevious = {},
                 onSubmit = {},
-                startButton = { text, onClick -> Button(onClick = onClick) { Text(text) } },
-                nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
-                previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
-                submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } },
+                components = StepperComponents(
+                    startButton = { text, onClick -> Button(onClick = onClick) { Text(text) } },
+                    nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
+                    previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
+                    submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } },
+                )
             ) {
                 Text("Screen content")
             }
@@ -55,10 +57,12 @@ class StepperTemplateTest {
                 onNext = {},
                 onPrevious = {},
                 onSubmit = {},
-                startButton = { text, onClick -> Button(onClick = onClick) { Text(text) } },
-                nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
-                previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
-                submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } }
+                components = StepperComponents(
+                    startButton = { text, onClick -> Button(onClick = onClick) { Text(text) } },
+                    nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
+                    previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
+                    submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } }
+                )
             ) {
                 Text("Screen content")
             }
@@ -83,13 +87,15 @@ class StepperTemplateTest {
                 onNext = {},
                 onPrevious = {},
                 onSubmit = {},
-                startButton = { text, onClick ->
-                    Button(onClick = onClick) { Text(text) }
-                    startButtonText = text
-                },
-                nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
-                previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
-                submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } },
+                components = StepperComponents(
+                    startButton = { text, onClick ->
+                        Button(onClick = onClick) { Text(text) }
+                        startButtonText = text
+                    },
+                    nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
+                    previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
+                    submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } },
+                )
             ) {
                 Text("Preview")
             }
@@ -116,10 +122,12 @@ class StepperTemplateTest {
                 onNext = {},
                 onPrevious = {},
                 onSubmit = {},
-                startButton = { text, onClick -> Button(onClick = onClick) { Text(text) } },
-                nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
-                previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
-                submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } },
+                components = StepperComponents(
+                    startButton = { text, onClick -> Button(onClick = onClick) { Text(text) } },
+                    nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
+                    previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
+                    submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } },
+                )
             ) {
                 Text(roadmap.getCurrent().data.toString())
             }

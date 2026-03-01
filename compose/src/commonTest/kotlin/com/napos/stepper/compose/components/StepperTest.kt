@@ -30,10 +30,10 @@ class StepperTest {
                     roadmap = roadmap,
                     provider = TestScreenProvider,
                     onSubmit = {},
-                    startButton = { text, onClick ->
+                    components = StepperComponents(startButton = { text, onClick ->
                         Button(onClick = onClick) { Text(text) }
                         startText = text
-                    },
+                    }),
                 )
             }
         }
@@ -53,11 +53,13 @@ class StepperTest {
                     roadmap = roadmap,
                     provider = TestScreenProvider,
                     onSubmit = {},
-                    startButton = { text, onClick ->
-                        Button(onClick = onClick) { Text(text) }
-                        startText = text
-                    },
-                    nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
+                    components = StepperComponents(
+                        startButton = { text, onClick ->
+                            Button(onClick = onClick) { Text(text) }
+                            startText = text
+                        },
+                        nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
+                    ),
                 )
             }
         }
@@ -82,12 +84,14 @@ class StepperTest {
                     roadmap = roadmap,
                     provider = TestScreenProvider,
                     onSubmit = {},
-                    startButton = { text, onClick ->
-                        Button(onClick = onClick) { Text(text) }
-                        startText = text
-                    },
-                    nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
-                    previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
+                    components = StepperComponents(
+                        startButton = { text, onClick ->
+                            Button(onClick = onClick) { Text(text) }
+                            startText = text
+                        },
+                        nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
+                        previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
+                    ),
                 )
             }
         }
@@ -112,14 +116,16 @@ class StepperTest {
                     roadmap = roadmap,
                     provider = TestScreenProvider,
                     onSubmit = {},
-                    startButton = { text, onClick ->
-                        Button(onClick = onClick) {
-                            Text(text)
-                            startText = text
-                        }
-                    },
-                    nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
-                    previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
+                    components = StepperComponents(
+                        startButton = { text, onClick ->
+                            Button(onClick = onClick) {
+                                Text(text)
+                                startText = text
+                            }
+                        },
+                        nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
+                        previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
+                    ),
                 )
             }
         }
@@ -148,13 +154,15 @@ class StepperTest {
                     roadmap = roadmap,
                     provider = TestScreenProvider,
                     onSubmit = { submitted = true },
-                    startButton = { text, onClick ->
-                        Button(onClick = onClick) { Text(text) }
-                        startText = text
-                    },
-                    nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
-                    previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
-                    submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } },
+                    components = StepperComponents(
+                        startButton = { text, onClick ->
+                            Button(onClick = onClick) { Text(text) }
+                            startText = text
+                        },
+                        nextButton = { onClick -> Button(onClick = onClick) { Text("Next") } },
+                        previousButton = { onClick -> Button(onClick = onClick) { Text("Previous") } },
+                        submitButton = { onClick -> Button(onClick = onClick) { Text("Submit") } },
+                    ),
                 )
             }
         }

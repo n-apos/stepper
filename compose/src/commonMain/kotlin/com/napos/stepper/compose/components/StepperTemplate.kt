@@ -19,10 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.napos.stepper.compose.Res
 import com.napos.stepper.compose.screen.MilestoneScreenProvider
 import com.napos.stepper.compose.stepper_edit_button
-import com.napos.stepper.compose.stepper_next_button
-import com.napos.stepper.compose.stepper_previous_button
 import com.napos.stepper.compose.stepper_start_button
-import com.napos.stepper.compose.stepper_submit_button
 import com.napos.stepper.core.Roadmap
 import org.jetbrains.compose.resources.stringResource
 
@@ -43,37 +40,11 @@ public fun StepperTemplate(
     modifier: Modifier = Modifier,
     properties: StepProperties = StepProperties.Default,
     colors: StepColors = StepColors.Default.defaultColors(),
-    step: @Composable (StepState) -> Unit = { Step(it) },
-    stepLink: @Composable (StepState) -> Unit = { StepLink(it) },
-    startButton: @Composable (text: String, onClick: () -> Unit) -> Unit = { text, onClick ->
-        StepButton(
-            text = text,
-            onClick = onClick,
-        )
-    },
-    nextButton: @Composable (onClick: () -> Unit) -> Unit = {
-        StepButton(
-            text = stringResource(Res.string.stepper_next_button),
-            onClick = it
-        )
-    },
-    previousButton: @Composable (onClick: () -> Unit) -> Unit = {
-        StepButton(
-            text = stringResource(Res.string.stepper_previous_button),
-            onClick = it
-        )
-    },
-    submitButton: @Composable (onClick: () -> Unit) -> Unit = {
-        StepButton(
-            text = stringResource(Res.string.stepper_submit_button),
-            onClick = it
-        )
-    },
+    components: StepperComponents = StepperComponents(),
     content: @Composable () -> Unit,
 ) {
     val current by roadmap.current.collectAsState(null)
     val properties = LocalStepProperties.current
-
 
     CompositionLocalProvider(
         LocalStepProperties provides properties,
@@ -107,9 +78,9 @@ public fun StepperTemplate(
                                 else -> StepState.Coming
                             }
                             if (index != 0) {
-                                stepLink(state)
+                                components.stepLink(state)
                             }
-                            step(state)
+                            components.step(state)
                         }
                     }
                 }
@@ -138,23 +109,23 @@ public fun StepperTemplate(
                             } else {
                                 stringResource(Res.string.stepper_edit_button)
                             }
-                            startButton(text) {
+                            components.startButton(text) {
                                 onStart()
                             }
                         }
 
                         StepperContentType.Step -> {
                             current?.previous?.let {
-                                previousButton {
+                                components.previousButton {
                                     onPrevious()
                                 }
                             }
                             current?.next?.let {
-                                nextButton {
+                                components.nextButton {
                                     onNext()
                                 }
                             } ?: run {
-                                submitButton {
+                                components.submitButton {
                                     onSubmit()
                                 }
                             }
