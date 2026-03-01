@@ -14,7 +14,9 @@ jobs:
     uses: ./.github/workflows/test.yml
     with:
       sha: ${{ github.sha }}
-    secrets: inherit
+    secrets:
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
   build:
     needs: test
@@ -27,7 +29,8 @@ jobs:
     uses: ./.github/workflows/bump.yml
     with:
       ref: ${{ github.ref }}
-    secrets: inherit
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     needs: bump_version
