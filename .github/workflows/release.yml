@@ -19,6 +19,7 @@ on:
       GPG_PASSPHRASE:
         required: true
 
+
 jobs:
   publish:
     runs-on: self-hosted

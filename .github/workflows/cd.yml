@@ -29,8 +29,6 @@ jobs:
     uses: ./.github/workflows/bump.yml
     with:
       ref: ${{ github.ref }}
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   release:
     needs: bump_version
