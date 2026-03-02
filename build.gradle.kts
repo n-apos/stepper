@@ -81,31 +81,9 @@ dependencies {
     dokka(projects.compose)
 }
 
-// Custom
-//fun getVersion(): String =
-//    with(Properties()) {
-//        load(file("version.properties").reader())
-//        this["version"] as String
-//    }
-//
-//tasks.register("version") {
-//    doLast {
-//        println("version=$version")
-//    }
-//}
-//
-//tasks.register("setVersion") {
-//    doLast {
-//        val version = properties["version-name"] as? String
-//        if (version != null) {
-//            with(Properties()) {
-//                load(file("version.properties").reader())
-//                this["version"] = version
-//                store(file("version.properties").writer(), null)
-//            }
-//        } else {
-//            error("version-name property not found")
-//        }
-//
-//    }
-//}
+tasks.register<Copy>("generateReadme") {
+    from("doc/README.template.md")
+    into(projectDir)
+    rename { "README.md" }
+    expand("version" to project.version)
+}

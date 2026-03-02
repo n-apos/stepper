@@ -55,10 +55,10 @@ To use this library in your project, add the following dependencies to your `bui
 ```kotlin
 dependencies {
     // For the core business logic
-    implementation("com.n-apos.stepper:stepper-core:0.2.0")
+    implementation("com.n-apos.stepper:stepper-core:${version}")
 
     // For the Compose UI components
-    implementation("com.n-apos.stepper:stepper-compose:0.2.0")
+    implementation("com.n-apos.stepper:stepper-compose:${version}")
 }
 ```
 
@@ -124,7 +124,7 @@ class MyScreenProvider : MilestoneScreenProvider() {
             is FirstMilestone -> FirstScreen(milestone)
             is SecondMilestone -> SecondScreen(milestone)
             is ThirdMilestone -> ThirdScreen(milestone)
-            else -> error("Milestone not supported: ${milestone::class.simpleName}")
+            else -> error("Milestone not supported: \${milestone::class.simpleName}")
         }
     }
 }
@@ -143,7 +143,7 @@ class FirstScreen(
     @Composable
     override fun render() {
         // Build your UI for the "First" step here.
-        Text("This is the UI for the first step: ${title()}")
+        Text("This is the UI for the first step: \${title()}")
     }
 }
 
@@ -156,7 +156,7 @@ Stepper(
     onSubmit = {
         // This is called when the user clicks the final submit button.
         val result = roadmap.aggregate<AggregatedResult>()
-        println("All steps complete! $result")
+        println("All steps complete! \$result")
     },
 )
 ```
